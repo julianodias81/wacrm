@@ -21,6 +21,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Switch } from '@/components/ui/switch';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { SettingsPanelHead } from './settings-panel-head';
 import {
@@ -69,6 +70,8 @@ export function WhatsAppConfig() {
   const [verifyToken, setVerifyToken] = useState('');
   const [pin, setPin] = useState('');
   const [tokenEdited, setTokenEdited] = useState(false);
+  const [showAgentName, setShowAgentName] = useState(false);
+  const [togglingAgentName, setTogglingAgentName] = useState(false);
 
   // True once /register has succeeded on Meta's side (timestamp set
   // in the row). When false, the saved config is metadata-only and
@@ -121,6 +124,7 @@ export function WhatsAppConfig() {
         setVerifyToken('');
         setPin('');
         setTokenEdited(false);
+        setShowAgentName(Boolean(data.show_agent_name_in_messages));
       } else {
         setConfig(null);
         setPhoneNumberId('');
@@ -129,6 +133,7 @@ export function WhatsAppConfig() {
         setVerifyToken('');
         setPin('');
         setTokenEdited(false);
+        setShowAgentName(false);
       }
       // Clear any stale probe result when reloading the row.
       setRegistrationProbe(null);
@@ -369,6 +374,29 @@ export function WhatsAppConfig() {
   function handleCopyWebhookUrl() {
     navigator.clipboard.writeText(webhookUrl);
     toast.success('Webhook URL copied to clipboard');
+  }
+
+  async function handleToggleAgentName(next: boolean) {
+    setShowAgentName(next);
+    setTogglingAgentName(true);
+    try {
+      const res = await fetch('/api/whatsapp/config', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ show_agent_name_in_messages: next }),
+      });
+      if (!res.ok) {
+        setShowAgentName(!next);
+        toast.error(t('agentNameToggleError'));
+        return;
+      }
+      toast.success(t('agentNameToggleSaved'));
+    } catch {
+      setShowAgentName(!next);
+      toast.error(t('agentNameToggleError'));
+    } finally {
+      setTogglingAgentName(false);
+    }
   }
 
   if (loading) {
@@ -679,6 +707,29 @@ export function WhatsAppConfig() {
                   <Copy className="size-4" />
                 </Button>
               </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Agent name prefix */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-foreground">{t('agentNameTitle')}</CardTitle>
+            <CardDescription className="text-muted-foreground">
+              {t('agentNameDesc')}
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center justify-between gap-4 rounded-md border border-border p-3">
+              <div>
+                <p className="text-sm font-medium text-foreground">{t('agentNameToggle')}</p>
+                <p className="text-xs text-muted-foreground">{t('agentNameToggleDesc')}</p>
+              </div>
+              <Switch
+                checked={showAgentName}
+                onCheckedChange={handleToggleAgentName}
+                disabled={!config || togglingAgentName}
+              />
             </div>
           </CardContent>
         </Card>

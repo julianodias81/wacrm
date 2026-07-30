@@ -84,6 +84,15 @@ export interface SendMessageParams {
   /** Structured payload for `messageType === 'interactive'`. */
   interactivePayload?: InteractiveMessagePayload | null;
   replyToMessageId?: string | null;
+  /** Auth user id of the sending agent — persisted on the message row. */
+  senderUserId?: string;
+  /**
+   * Sending agent's display name. Only ever supplied by the dashboard
+   * send route (never the public /api/v1/messages endpoint) — combined
+   * with the account's `show_agent_name_in_messages` toggle, this is
+   * what gates the `*Name*\n` prefix on plain-text sends.
+   */
+  agentDisplayName?: string;
 }
 
 export interface SendMessageResult {
@@ -197,6 +206,8 @@ export async function sendMessageToConversation(
     templateMessageParams,
     interactivePayload,
     replyToMessageId,
+    senderUserId,
+    agentDisplayName,
   } = params;
 
   if (!conversationId) {
@@ -385,11 +396,19 @@ export async function sendMessageToConversation(
       });
       return result.messageId;
     }
+    // Bold-name title above the message body — the only way to attach
+    // a per-message "sender" on WhatsApp, since Cloud API has no native
+    // field for it. Gated on the account opting in AND an agent name
+    // actually being supplied (the public API route never passes one).
+    const outboundText =
+      config.show_agent_name_in_messages && agentDisplayName
+        ? `*${agentDisplayName}*\n${contentText}`
+        : contentText!;
     const result = await sendTextMessage({
       phoneNumberId: config.phone_number_id,
       accessToken,
       to: phone,
-      text: contentText!,
+      text: outboundText,
       contextMessageId,
     });
     return result.messageId;
@@ -453,6 +472,7 @@ export async function sendMessageToConversation(
     .insert({
       conversation_id: conversationId,
       sender_type: 'agent',
+      sender_id: senderUserId || null,
       content_type: messageType,
       content_text: interactiveBody ?? contentText ?? null,
       media_url: mediaUrl || null,

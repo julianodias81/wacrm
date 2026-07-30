@@ -285,6 +285,8 @@ export interface WhatsAppConfig {
   subscribed_apps_at?: string;
   /** Last error from /register; cleared on success. */
   last_registration_error?: string;
+  /** When true, plain-text agent sends get a `*Name*\n` prefix — see send-message.ts. */
+  show_agent_name_in_messages: boolean;
 }
 
 // Raw Meta status enum. We persist this verbatim from Meta (sync + webhook)

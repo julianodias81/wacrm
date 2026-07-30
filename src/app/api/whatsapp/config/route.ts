@@ -478,3 +478,58 @@ export async function DELETE() {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
+
+/**
+ * PATCH /api/whatsapp/config
+ *
+ * Lightweight update for display-only behaviour toggles that don't
+ * need Meta re-verification. Kept separate from POST (which hard-
+ * requires access_token + phone_number_id and re-runs /register) so
+ * flipping a switch here never forces the user to re-enter credentials.
+ */
+export async function PATCH(request: Request) {
+  try {
+    const supabase = await createClient()
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser()
+    if (authError || !user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    const accountId = await resolveAccountId(supabase, user.id)
+    if (!accountId) {
+      return NextResponse.json(
+        { error: 'Your profile is not linked to an account.' },
+        { status: 403 },
+      )
+    }
+
+    const { show_agent_name_in_messages } = await request.json()
+    if (typeof show_agent_name_in_messages !== 'boolean') {
+      return NextResponse.json(
+        { error: 'show_agent_name_in_messages must be a boolean' },
+        { status: 400 },
+      )
+    }
+
+    const { error } = await supabase
+      .from('whatsapp_config')
+      .update({ show_agent_name_in_messages })
+      .eq('account_id', accountId)
+
+    if (error) {
+      console.error('Error updating whatsapp_config toggle:', error)
+      return NextResponse.json(
+        { error: 'Failed to update configuration' },
+        { status: 500 },
+      )
+    }
+
+    return NextResponse.json({ success: true })
+  } catch (error) {
+    console.error('Error in WhatsApp config PATCH:', error)
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+  }
+}

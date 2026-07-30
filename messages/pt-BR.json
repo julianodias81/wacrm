@@ -1674,7 +1674,13 @@
       "step4_3": "Cole a <strong class=\"text-foreground\">URL de callback do webhook</strong> acima",
       "step4_4": "Informe o mesmo <strong class=\"text-foreground\">Token de verificação</strong> definido aqui",
       "step4_5": "Assine o campo de webhook \"messages\"",
-      "metaDocs": "Documentação da API do Meta WhatsApp"
+      "metaDocs": "Documentação da API do Meta WhatsApp",
+      "agentNameTitle": "Nome do agente nas mensagens",
+      "agentNameDesc": "Exibe o nome de quem enviou a mensagem como um título em negrito acima dela, visível para o cliente no WhatsApp.",
+      "agentNameToggle": "Mostrar nome do agente nas mensagens enviadas",
+      "agentNameToggleDesc": "Adiciona o nome do agente como uma linha em negrito acima das respostas em texto simples enviadas pela caixa de entrada. Não se aplica a modelos, transmissões ou à API pública.",
+      "agentNameToggleSaved": "Configuração atualizada",
+      "agentNameToggleError": "Falha ao atualizar a configuração"
     },
     "sections": {
       "overview": "Visão geral",

@@ -1684,7 +1684,13 @@
       "step4_3": "Paste the <strong class=\"text-foreground\">Webhook Callback URL</strong> from above",
       "step4_4": "Enter the same <strong class=\"text-foreground\">Verify Token</strong> you set here",
       "step4_5": "Subscribe to \"messages\" webhook field",
-      "metaDocs": "Meta WhatsApp API Documentation"
+      "metaDocs": "Meta WhatsApp API Documentation",
+      "agentNameTitle": "Agent name on messages",
+      "agentNameDesc": "Show the sending team member's name as a bold title above their messages, visible to the customer on WhatsApp.",
+      "agentNameToggle": "Show agent name in outbound messages",
+      "agentNameToggleDesc": "Adds the agent's name as a bold line above plain-text replies sent from the inbox. Doesn't apply to templates, broadcasts, or the public API.",
+      "agentNameToggleSaved": "Setting updated",
+      "agentNameToggleError": "Failed to update setting"
     },
     "sections": {
       "overview": "Overview",
