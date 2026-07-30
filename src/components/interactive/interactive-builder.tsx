@@ -88,7 +88,15 @@ export function InteractiveBuilder({
   };
 
   return (
-    <div className="flex flex-col gap-4 md:flex-row">
+    // `@container` + `@xl:` (not `md:`) — this builder is embedded in
+    // containers of wildly different widths (a ~670px dialog for the
+    // inbox composer and quick replies, but a ~290px inline step card
+    // in the automation builder). A viewport-width breakpoint would
+    // force the row layout even inside the narrow card, squeezing the
+    // body textarea down to a sliver. Container queries key off the
+    // actual parent width instead, so the row layout only kicks in
+    // where there's really room for the 280px preview beside the form.
+    <div className="@container flex flex-col gap-4 @xl:flex-row">
       <div className="flex min-w-0 flex-1 flex-col gap-3">
         {/* Kind toggle */}
         <div className="flex gap-2">
@@ -161,7 +169,7 @@ export function InteractiveBuilder({
       </div>
 
       {showPreview && (
-        <div className="flex shrink-0 flex-col gap-1.5 md:w-[280px]">
+        <div className="flex shrink-0 flex-col gap-1.5 @xl:w-[280px]">
           <span className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
             Preview
           </span>
