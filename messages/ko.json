@@ -163,7 +163,19 @@
       "timeS": "{sec}초 전",
       "timeM": "{min}분 전",
       "timeH": "{hr}시간 전",
-      "timeD": "{day}일 전"
+      "timeD": "{day}일 전",
+      "newMessageFrom": "{name}님으로부터 새 메시지",
+      "newContact": "새 연락처: {name}",
+      "dealInStage": "거래 \"{title}\" — {stage} 단계",
+      "dealUpdated": "거래 \"{title}\" 업데이트됨",
+      "broadcastSentTo": "{count}명의 연락처에 전송됨",
+      "broadcastStatus": "{status} ({count}명 수신자)",
+      "broadcastActivity": "브로드캐스트 \"{name}\" {label}",
+      "automationTriggered": "자동화 \"{name}\"이(가) {who}에게 실행됨",
+      "automationFailed": "자동화 \"{name}\"이(가) {who}에게 실패함",
+      "unknownContact": "알 수 없음",
+      "aContact": "연락처",
+      "automationFallbackName": "자동화"
     },
     "conversationsChart": {
       "title": "기간별 대화 추이",
@@ -193,7 +205,14 @@
       "thisWeek": "이번 주:",
       "lastWeek": "지난 주:",
       "noReplies": "아직 기록된 응답이 없습니다",
-      "noRepliesHint": "고객 메시지에 답변하면 이 차트가 채워집니다."
+      "noRepliesHint": "고객 메시지에 답변하면 이 차트가 채워집니다.",
+      "mon": "월",
+      "tue": "화",
+      "wed": "수",
+      "thu": "목",
+      "fri": "금",
+      "sat": "토",
+      "sun": "일"
     },
     "emptyState": {
       "title": "아직 데이터가 충분하지 않습니다"
@@ -844,6 +863,28 @@
     }
   },
   "Automations": {
+    "templates": {
+      "welcomeMessage": {
+        "name": "환영 메시지",
+        "description": "처음 연락한 고객에게 자동으로 인사말을 보냅니다.",
+        "messageText": "안녕하세요! 👋 문의해 주셔서 감사합니다. 곧 답변드리겠습니다."
+      },
+      "outOfOffice": {
+        "name": "부재중 안내",
+        "description": "업무 시간 외에 자동으로 답장해 아무도 기다리지 않게 합니다.",
+        "messageText": "메시지 감사합니다! 저희 팀은 현재 오프라인 상태이며(오전 9시~오후 6시 운영), 내일 가장 먼저 답변드리겠습니다."
+      },
+      "leadQualifier": {
+        "name": "리드 자격 확인",
+        "description": "자격 확인 질문을 통해 인바운드 리드를 걸러냅니다.",
+        "messageText": "네 — 가격 문의 도와드릴게요! 간단한 질문 하나만 드릴게요: 대략 몇 명 정도 사용하실 예정인가요?"
+      },
+      "followUpReminder": {
+        "name": "후속 리마인더",
+        "description": "고객이 24시간 이내에 답장하지 않으면 알림을 보냅니다.",
+        "messageText": "다시 한번 확인차 연락드려요 — 다른 궁금하신 점 있으신가요? 언제든 도와드릴게요!"
+      }
+    },
     "list": {
       "title": "자동화",
       "subtitle": "WhatsApp® 이벤트에 자동으로 반응하는 워크플로를 만드세요.",
@@ -1052,6 +1093,43 @@
     }
   },
   "Flows": {
+    "templates": {
+      "welcomeMenu": {
+        "name": "환영 메뉴",
+        "description": "키워드를 입력한 고객에게 인사하고, 신규 고객인지 기존 고객인지에 따라 적절한 상담원에게 연결합니다.",
+        "welcomeText": "안녕하세요! 👋 고객지원팀입니다. 기존 고객이신가요, 아니면 처음 오셨나요?",
+        "welcomeFooter": "아래 버튼을 눌러 계속 진행하세요.",
+        "existingBtn": "기존 고객",
+        "newBtn": "신규 고객",
+        "existingHandoffNote": "기존 고객이 도움이 필요합니다 — 답변 전에 계정 이력을 확인해주세요.",
+        "newHandoffNote": "신규 고객입니다 — 가격 정보와 온보딩 링크를 안내해주세요."
+      },
+      "faqBot": {
+        "name": "FAQ 봇",
+        "description": "자주 묻는 질문에 자동으로 답변합니다. 고객이 목록에서 주제를 선택하면 봇이 답변하고 종료됩니다.",
+        "topicsText": "무엇을 도와드릴까요?",
+        "topicsButtonLabel": "주제 보기",
+        "sectionCommon": "자주 묻는 질문",
+        "rowHours": "영업시간",
+        "rowPricing": "가격",
+        "rowRefunds": "환불 정책",
+        "sectionOther": "기타",
+        "rowHuman": "상담원과 대화하기",
+        "answerHours": "현지 시간 기준 월–금 오전 9시~오후 6시에 운영합니다. 주말 지원은 긴급한 문의로 제한됩니다.",
+        "answerPricing": "요금제는 월 9달러부터 시작합니다. 자세한 내용은 https://example.com/pricing 에서 확인하세요.",
+        "answerRefunds": "구매 후 30일 이내에는 환불이 가능합니다. 주문 번호를 답장으로 보내주시면 처리해드리겠습니다.",
+        "humanHandoffNote": "고객이 FAQ 봇에서 상담원과 대화하기를 요청했습니다."
+      },
+      "leadCapture": {
+        "name": "리드 수집",
+        "description": "첫 문의 고객에게 인사하고 이름·이메일·회사명을 수집한 후, 답변 내용을 메모에 담아 영업팀으로 인계합니다.",
+        "introText": "환영합니다! 👋 적합한 담당자에게 연결해드리기 위해 몇 가지 간단한 질문을 드릴게요.",
+        "askNamePrompt": "성함이 어떻게 되세요?",
+        "askEmailPrompt": "감사합니다, {{vars.name}}님! 업무용 이메일 주소가 어떻게 되세요?",
+        "askCompanyPrompt": "거의 다 됐습니다 — 회사명이 어떻게 되세요?",
+        "handoffNote": "신규 리드 — 이름={{vars.name}}, 이메일={{vars.email}}, 회사={{vars.company}}."
+      }
+    },
     "list": {
       "title": "플로우",
       "beta": "베타",
@@ -1271,6 +1349,45 @@
       "modeRemove": "제거",
       "tagPicked": "{tag} 태그 {mode}…",
       "tagNone": "태그 {mode} (선택된 태그 없음)"
+    }
+  },
+  "Agents": {
+    "page": {
+      "title": "AI 에이전트",
+      "description": "직접 키를 등록하는 AI 에이전트입니다 — 먼저 설정하고, 플레이그라운드에서 테스트한 후 받은 편지함에서 고객에게 응답하게 하세요.",
+      "tabPlayground": "플레이그라운드",
+      "tabSetup": "설정",
+      "tabUsage": "사용량"
+    },
+    "playground": {
+      "title": "플레이그라운드",
+      "subtitle": "— 고객인 것처럼 답변을 테스트해보세요",
+      "reset": "초기화",
+      "emptyHint": "메시지를 보내서 에이전트가 어떻게 답할지 확인해보세요.",
+      "emptyHintDetail": "지식 베이스를 사용하며, 핸드오프를 포함해 자동 응답 봇과 똑같이 동작합니다.",
+      "goToSetup": "아직 설정 안 하셨나요? 설정으로 이동",
+      "handoffNote": "여기서 사람에게 인계됩니다",
+      "thinking": "생각 중…",
+      "inputPlaceholder": "고객 메시지를 입력하세요…",
+      "toastNotConfigured": "아직 에이전트가 설정되지 않았습니다 — 먼저 설정을 완료하세요.",
+      "toastNoReply": "응답을 가져올 수 없습니다.",
+      "toastUnreachable": "에이전트에 연결할 수 없습니다."
+    },
+    "usage": {
+      "title": "토큰 사용량",
+      "description": "초안 작성과 자동 응답 봇이 제공자 키로 사용한 토큰입니다. 개수만 집계하며, 메시지 내용은 저장되지 않습니다.",
+      "lastNDays": "최근 {days}일",
+      "noUsage": "최근 {days}일 동안 AI 사용 내역이 없습니다.",
+      "noUsageHint": "어시스턴트가 초안을 작성하고 자동 응답을 하면 여기에 채워집니다.",
+      "totalTokens": "총 토큰",
+      "llmCalls": "LLM 호출",
+      "autoReply": "자동 응답",
+      "drafts": "초안",
+      "tokensPerDay": "일별 토큰",
+      "byModel": "모델별",
+      "modelStats": "{tok} 토큰 · {calls}회 호출",
+      "truncatedNote": "일부 기간만 표시 중입니다 — 사용량이 많아 최근 기록만 요약해서 보여줍니다.",
+      "toastFailedLoad": "사용량을 불러오지 못했습니다"
     }
   },
   "Settings": {

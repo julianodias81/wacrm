@@ -28,105 +28,109 @@ export interface AutomationTemplateDefinition {
   steps: TemplateStepSeed[]
 }
 
-export const AUTOMATION_TEMPLATES: Record<TemplateSlug, AutomationTemplateDefinition> = {
-  welcome_message: {
-    slug: 'welcome_message',
-    name: 'Welcome Message',
-    description: 'Auto-reply to first-time contacts with a greeting.',
-    // first_inbound_message (added in PR #33) catches both brand-new
-    // contacts AND manually-added/imported contacts on their first-ever
-    // reply, which is what a user setting up a "welcome" automation
-    // almost always wants. new_contact_created would miss the
-    // manually-imported case.
-    trigger_type: 'first_inbound_message',
-    trigger_config: {},
-    steps: [
-      {
-        step_type: 'send_message',
-        step_config: {
-          text: "Hi! 👋 Thanks for reaching out. We'll get back to you shortly.",
+/** next-intl's `useTranslations`/`getTranslations` return type — passed
+ *  in by the caller (client component or server route) since this module
+ *  is a plain data factory, not a component. */
+export type Translate = (key: string, values?: Record<string, string | number>) => string
+
+// Names, descriptions, and message text resolve from Automations.templates.*
+// at call time so a created automation's stored copy matches the
+// deployment's locale. Trigger keywords and step config keys (tag_id,
+// mode, unit, etc.) stay literal — they're not copy shown to anyone.
+
+export function buildAutomationTemplates(
+  t: Translate,
+): Record<TemplateSlug, AutomationTemplateDefinition> {
+  const tt = (slug: string, key: string) => t(`templates.${slug}.${key}`)
+  return {
+    welcome_message: {
+      slug: 'welcome_message',
+      name: tt('welcomeMessage', 'name'),
+      description: tt('welcomeMessage', 'description'),
+      // first_inbound_message (added in PR #33) catches both brand-new
+      // contacts AND manually-added/imported contacts on their first-ever
+      // reply, which is what a user setting up a "welcome" automation
+      // almost always wants. new_contact_created would miss the
+      // manually-imported case.
+      trigger_type: 'first_inbound_message',
+      trigger_config: {},
+      steps: [
+        {
+          step_type: 'send_message',
+          step_config: { text: tt('welcomeMessage', 'messageText') },
         },
-      },
-      {
-        step_type: 'add_tag',
-        step_config: { tag_id: '' },
-      },
-    ],
-  },
-  out_of_office: {
-    slug: 'out_of_office',
-    name: 'Out of Office',
-    description: 'Auto-reply during off-hours so nobody is left waiting.',
-    trigger_type: 'new_message_received',
-    trigger_config: {},
-    steps: [
-      {
-        step_type: 'condition',
-        step_config: {
-          subject: 'time_of_day',
-          operand: '18:00-09:00',
+        {
+          step_type: 'add_tag',
+          step_config: { tag_id: '' },
         },
-      },
-      {
-        step_type: 'send_message',
-        step_config: {
-          text:
-            "Thanks for your message! Our team is offline right now (9am–6pm) and will reply first thing tomorrow.",
-        },
-        parent_index: 0,
-        branch: 'yes',
-      },
-    ],
-  },
-  lead_qualifier: {
-    slug: 'lead_qualifier',
-    name: 'Lead Qualifier',
-    description: 'Ask qualification questions to filter inbound leads.',
-    trigger_type: 'keyword_match',
-    trigger_config: {
-      keywords: ['pricing', 'quote', 'buy'],
-      match_type: 'contains',
+      ],
     },
-    steps: [
-      {
-        step_type: 'send_message',
-        step_config: {
-          text:
-            "Great — happy to help with pricing! Quick question: roughly how many seats are you looking for?",
+    out_of_office: {
+      slug: 'out_of_office',
+      name: tt('outOfOffice', 'name'),
+      description: tt('outOfOffice', 'description'),
+      trigger_type: 'new_message_received',
+      trigger_config: {},
+      steps: [
+        {
+          step_type: 'condition',
+          step_config: {
+            subject: 'time_of_day',
+            operand: '18:00-09:00',
+          },
         },
-      },
-      {
-        step_type: 'wait',
-        step_config: { amount: 10, unit: 'minutes' },
-      },
-      {
-        step_type: 'assign_conversation',
-        step_config: { mode: 'round_robin' },
-      },
-    ],
-  },
-  follow_up_reminder: {
-    slug: 'follow_up_reminder',
-    name: 'Follow-up Reminder',
-    description: 'Send a nudge if a contact has not replied within 24 hours.',
-    trigger_type: 'new_message_received',
-    trigger_config: {},
-    steps: [
-      {
-        step_type: 'wait',
-        step_config: { amount: 1, unit: 'days' },
-      },
-      {
-        step_type: 'send_message',
-        step_config: {
-          text:
-            "Just circling back — did you have any other questions for us? Happy to help!",
+        {
+          step_type: 'send_message',
+          step_config: { text: tt('outOfOffice', 'messageText') },
+          parent_index: 0,
+          branch: 'yes',
         },
+      ],
+    },
+    lead_qualifier: {
+      slug: 'lead_qualifier',
+      name: tt('leadQualifier', 'name'),
+      description: tt('leadQualifier', 'description'),
+      trigger_type: 'keyword_match',
+      trigger_config: {
+        keywords: ['pricing', 'quote', 'buy'],
+        match_type: 'contains',
       },
-    ],
-  },
+      steps: [
+        {
+          step_type: 'send_message',
+          step_config: { text: tt('leadQualifier', 'messageText') },
+        },
+        {
+          step_type: 'wait',
+          step_config: { amount: 10, unit: 'minutes' },
+        },
+        {
+          step_type: 'assign_conversation',
+          step_config: { mode: 'round_robin' },
+        },
+      ],
+    },
+    follow_up_reminder: {
+      slug: 'follow_up_reminder',
+      name: tt('followUpReminder', 'name'),
+      description: tt('followUpReminder', 'description'),
+      trigger_type: 'new_message_received',
+      trigger_config: {},
+      steps: [
+        {
+          step_type: 'wait',
+          step_config: { amount: 1, unit: 'days' },
+        },
+        {
+          step_type: 'send_message',
+          step_config: { text: tt('followUpReminder', 'messageText') },
+        },
+      ],
+    },
+  }
 }
 
-export function getTemplate(slug: string): AutomationTemplateDefinition | null {
-  return AUTOMATION_TEMPLATES[slug as TemplateSlug] ?? null
+export function getTemplate(slug: string, t: Translate): AutomationTemplateDefinition | null {
+  return buildAutomationTemplates(t)[slug as TemplateSlug] ?? null
 }

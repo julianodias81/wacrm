@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { getTranslations } from 'next-intl/server'
 import { createClient } from '@/lib/supabase/server'
 import { requireRole, toErrorResponse } from '@/lib/auth/account'
 import { supabaseAdmin } from '@/lib/automations/admin-client'
@@ -68,13 +69,14 @@ export async function POST(request: Request) {
   let effectiveTriggerConfig = trigger_config
 
   if (template && (!steps || steps.length === 0)) {
-    const t = getTemplate(template)
-    if (t) {
-      effectiveName = effectiveName ?? t.name
-      effectiveDescription = effectiveDescription ?? t.description
-      effectiveTriggerType = effectiveTriggerType ?? t.trigger_type
-      effectiveTriggerConfig = effectiveTriggerConfig ?? t.trigger_config
-      effectiveSteps = t.steps as unknown as BuilderStepInput[]
+    const t = await getTranslations('Automations')
+    const tmpl = getTemplate(template, t)
+    if (tmpl) {
+      effectiveName = effectiveName ?? tmpl.name
+      effectiveDescription = effectiveDescription ?? tmpl.description
+      effectiveTriggerType = effectiveTriggerType ?? tmpl.trigger_type
+      effectiveTriggerConfig = effectiveTriggerConfig ?? tmpl.trigger_config
+      effectiveSteps = tmpl.steps as unknown as BuilderStepInput[]
     }
   }
 

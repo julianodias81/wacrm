@@ -163,7 +163,19 @@
       "timeS": "{sec}s ago",
       "timeM": "{min}m ago",
       "timeH": "{hr}h ago",
-      "timeD": "{day}d ago"
+      "timeD": "{day}d ago",
+      "newMessageFrom": "New message from {name}",
+      "newContact": "New contact: {name}",
+      "dealInStage": "Deal \"{title}\" in {stage}",
+      "dealUpdated": "Deal \"{title}\" updated",
+      "broadcastSentTo": "sent to {count} contacts",
+      "broadcastStatus": "{status} ({count} recipients)",
+      "broadcastActivity": "Broadcast \"{name}\" {label}",
+      "automationTriggered": "Automation \"{name}\" triggered for {who}",
+      "automationFailed": "Automation \"{name}\" failed for {who}",
+      "unknownContact": "Unknown",
+      "aContact": "a contact",
+      "automationFallbackName": "Automation"
     },
     "conversationsChart": {
       "title": "Conversations Over Time",
@@ -193,7 +205,14 @@
       "thisWeek": "This week:",
       "lastWeek": "Last week:",
       "noReplies": "No replies recorded yet",
-      "noRepliesHint": "This chart fills in as you reply to customer messages."
+      "noRepliesHint": "This chart fills in as you reply to customer messages.",
+      "mon": "Mon",
+      "tue": "Tue",
+      "wed": "Wed",
+      "thu": "Thu",
+      "fri": "Fri",
+      "sat": "Sat",
+      "sun": "Sun"
     },
     "emptyState": {
       "title": "Not enough data yet"
@@ -844,6 +863,28 @@
     }
   },
   "Automations": {
+    "templates": {
+      "welcomeMessage": {
+        "name": "Welcome Message",
+        "description": "Auto-reply to first-time contacts with a greeting.",
+        "messageText": "Hi! 👋 Thanks for reaching out. We'll get back to you shortly."
+      },
+      "outOfOffice": {
+        "name": "Out of Office",
+        "description": "Auto-reply during off-hours so nobody is left waiting.",
+        "messageText": "Thanks for your message! Our team is offline right now (9am–6pm) and will reply first thing tomorrow."
+      },
+      "leadQualifier": {
+        "name": "Lead Qualifier",
+        "description": "Ask qualification questions to filter inbound leads.",
+        "messageText": "Great — happy to help with pricing! Quick question: roughly how many seats are you looking for?"
+      },
+      "followUpReminder": {
+        "name": "Follow-up Reminder",
+        "description": "Send a nudge if a contact has not replied within 24 hours.",
+        "messageText": "Just circling back — did you have any other questions for us? Happy to help!"
+      }
+    },
     "list": {
       "title": "Automations",
       "subtitle": "Build workflows that react to WhatsApp® events automatically.",
@@ -1052,6 +1093,43 @@
     }
   },
   "Flows": {
+    "templates": {
+      "welcomeMenu": {
+        "name": "Welcome menu",
+        "description": "Greet customers who type a keyword and route them to the right agent based on whether they're new or existing.",
+        "welcomeText": "Hi! 👋 Welcome to support. Are you an existing customer or new here?",
+        "welcomeFooter": "Tap a button below to continue.",
+        "existingBtn": "Existing customer",
+        "newBtn": "New customer",
+        "existingHandoffNote": "Existing customer needs assistance — please check account history before replying.",
+        "newHandoffNote": "New customer — share pricing + onboarding link."
+      },
+      "faqBot": {
+        "name": "FAQ bot",
+        "description": "Answer common questions automatically. Customer picks a topic from a list; the bot replies with the answer and ends.",
+        "topicsText": "What can I help you with?",
+        "topicsButtonLabel": "View topics",
+        "sectionCommon": "Common questions",
+        "rowHours": "Opening hours",
+        "rowPricing": "Pricing",
+        "rowRefunds": "Refund policy",
+        "sectionOther": "Other",
+        "rowHuman": "Talk to a human",
+        "answerHours": "We're open Mon–Fri, 9am–6pm local time. Weekend support is limited to urgent issues.",
+        "answerPricing": "Our pricing starts at $9/mo. Visit https://example.com/pricing for the full breakdown.",
+        "answerRefunds": "Refunds are honored within 30 days of purchase. Reply with your order number and we'll process it.",
+        "humanHandoffNote": "Customer asked to talk to a human from the FAQ bot."
+      },
+      "leadCapture": {
+        "name": "Lead capture",
+        "description": "Greet first-time inbounds, capture name + email + company, then hand off to sales with the answers in the note.",
+        "introText": "Welcome! 👋 I'll ask a few quick questions so we can get you to the right person.",
+        "askNamePrompt": "What's your name?",
+        "askEmailPrompt": "Thanks {{vars.name}}! What's your work email?",
+        "askCompanyPrompt": "Almost done — what's your company name?",
+        "handoffNote": "New lead — name={{vars.name}}, email={{vars.email}}, company={{vars.company}}."
+      }
+    },
     "list": {
       "title": "Flows",
       "beta": "Beta",
@@ -1271,6 +1349,45 @@
       "modeRemove": "Remove",
       "tagPicked": "{mode} tag {tag}…",
       "tagNone": "{mode} tag (none picked)"
+    }
+  },
+  "Agents": {
+    "page": {
+      "title": "AI Agents",
+      "description": "Your bring-your-own-key AI agent — set it up, then test it in the playground before it replies to customers in the inbox.",
+      "tabPlayground": "Playground",
+      "tabSetup": "Setup",
+      "tabUsage": "Usage"
+    },
+    "playground": {
+      "title": "Playground",
+      "subtitle": "— test replies as if you were a customer",
+      "reset": "Reset",
+      "emptyHint": "Send a message to see how your agent would reply.",
+      "emptyHintDetail": "It uses your knowledge base and behaves exactly like the auto-reply bot — including handoff.",
+      "goToSetup": "Not set up yet? Go to Setup",
+      "handoffNote": "Would hand off to a human here",
+      "thinking": "Thinking…",
+      "inputPlaceholder": "Type a customer message…",
+      "toastNotConfigured": "No agent configured yet — finish Setup first.",
+      "toastNoReply": "Couldn't get a reply.",
+      "toastUnreachable": "Couldn't reach the agent."
+    },
+    "usage": {
+      "title": "Token usage",
+      "description": "Tokens spent on your provider key by drafts and the auto-reply bot. Counts only — no message content is stored here.",
+      "lastNDays": "Last {days} days",
+      "noUsage": "No AI usage in the last {days} days yet.",
+      "noUsageHint": "This fills in as the assistant drafts and auto-replies.",
+      "totalTokens": "Total tokens",
+      "llmCalls": "LLM calls",
+      "autoReply": "Auto-reply",
+      "drafts": "Drafts",
+      "tokensPerDay": "Tokens per day",
+      "byModel": "By model",
+      "modelStats": "{tok} tok · {calls} {calls, plural, =1 {call} other {calls}}",
+      "truncatedNote": "Showing a partial window — usage is high enough that only the most recent records are summarized here.",
+      "toastFailedLoad": "Failed to load usage"
     }
   },
   "Settings": {

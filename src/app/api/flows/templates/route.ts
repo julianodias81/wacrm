@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { getTranslations } from 'next-intl/server'
 import { createClient } from '@/lib/supabase/server'
 import { listFlowTemplates } from '@/lib/flows/templates'
 
@@ -20,15 +21,16 @@ export async function GET() {
   if (!user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
+  const t = await getTranslations('Flows')
   // Shallow shape so the client gallery doesn't have to know about
   // the full node tree.
-  const templates = listFlowTemplates().map((t) => ({
-    slug: t.slug,
-    name: t.name,
-    description: t.description,
-    icon: t.icon,
-    trigger_type: t.trigger_type,
-    node_count: t.nodes.length,
+  const templates = listFlowTemplates(t).map((tmpl) => ({
+    slug: tmpl.slug,
+    name: tmpl.name,
+    description: tmpl.description,
+    icon: tmpl.icon,
+    trigger_type: tmpl.trigger_type,
+    node_count: tmpl.nodes.length,
   }))
   return NextResponse.json({ templates })
 }

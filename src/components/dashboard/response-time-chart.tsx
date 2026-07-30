@@ -1,7 +1,6 @@
 "use client"
 
 import { Clock } from 'lucide-react'
-import { DOW_SHORT_MON_FIRST } from '@/lib/dashboard/date-utils'
 import type { ResponseTimeSummary } from '@/lib/dashboard/types'
 import { BarChart } from '@/components/tremor/bar-chart'
 import { EmptyState } from './empty-state'
@@ -35,13 +34,21 @@ export function ResponseTimeChart({
   const t = useTranslations('Dashboard.responseTimeChart')
   const hasData = data?.buckets.some((b) => b.avgMinutes != null) ?? false
 
+  // Translated weekday abbreviations, same Monday-first order as
+  // DOW_SHORT_MON_FIRST — that constant stays the canonical index
+  // reference (used elsewhere for pure date-math), this is just its
+  // display-copy counterpart.
+  const dowLabels = [
+    t('mon'), t('tue'), t('wed'), t('thu'), t('fri'), t('sat'), t('sun'),
+  ]
+
   // Map buckets → Tremor rows. Null `avgMinutes` (no samples)
   // collapses to 0; the chart will render an empty slot for it.
   // We attach `samples` on the row so a future customTooltip can
   // surface "no samples" copy without losing the data shape.
   const chartData =
     data?.buckets.map((b, i) => ({
-      day: DOW_SHORT_MON_FIRST[i],
+      day: dowLabels[i],
       [CATEGORY]: b.avgMinutes ?? 0,
       samples: b.samples,
     })) ?? []

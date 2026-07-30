@@ -163,7 +163,19 @@
       "timeS": "{sec}s atrás",
       "timeM": "{min}min atrás",
       "timeH": "{hr}h atrás",
-      "timeD": "{day}d atrás"
+      "timeD": "{day}d atrás",
+      "newMessageFrom": "Nova mensagem de {name}",
+      "newContact": "Novo contato: {name}",
+      "dealInStage": "Negócio \"{title}\" em {stage}",
+      "dealUpdated": "Negócio \"{title}\" atualizado",
+      "broadcastSentTo": "enviada para {count} contatos",
+      "broadcastStatus": "{status} ({count} destinatários)",
+      "broadcastActivity": "Transmissão \"{name}\" {label}",
+      "automationTriggered": "Automação \"{name}\" acionada para {who}",
+      "automationFailed": "Automação \"{name}\" falhou para {who}",
+      "unknownContact": "Desconhecido",
+      "aContact": "um contato",
+      "automationFallbackName": "Automação"
     },
     "conversationsChart": {
       "title": "Conversas ao longo do tempo",
@@ -193,7 +205,14 @@
       "thisWeek": "Esta semana:",
       "lastWeek": "Semana passada:",
       "noReplies": "Nenhuma resposta registrada ainda",
-      "noRepliesHint": "Este gráfico se preenche conforme você responde às mensagens dos clientes."
+      "noRepliesHint": "Este gráfico se preenche conforme você responde às mensagens dos clientes.",
+      "mon": "Seg",
+      "tue": "Ter",
+      "wed": "Qua",
+      "thu": "Qui",
+      "fri": "Sex",
+      "sat": "Sáb",
+      "sun": "Dom"
     },
     "emptyState": {
       "title": "Ainda não há dados suficientes"
@@ -844,6 +863,28 @@
     }
   },
   "Automations": {
+    "templates": {
+      "welcomeMessage": {
+        "name": "Mensagem de boas-vindas",
+        "description": "Responde automaticamente a contatos de primeira vez com uma saudação.",
+        "messageText": "Oi! 👋 Obrigado por entrar em contato. Já retornamos em breve."
+      },
+      "outOfOffice": {
+        "name": "Fora do expediente",
+        "description": "Responde automaticamente fora do horário de atendimento para que ninguém fique esperando.",
+        "messageText": "Obrigado pela sua mensagem! Nossa equipe está offline agora (9h às 18h) e vai responder assim que possível amanhã."
+      },
+      "leadQualifier": {
+        "name": "Qualificador de leads",
+        "description": "Faz perguntas de qualificação para filtrar leads recebidos.",
+        "messageText": "Ótimo — vou te ajudar com os preços! Uma pergunta rápida: mais ou menos quantos usuários você está buscando?"
+      },
+      "followUpReminder": {
+        "name": "Lembrete de acompanhamento",
+        "description": "Envia um lembrete se um contato não responder em 24 horas.",
+        "messageText": "Só passando para saber — ficou alguma dúvida? Estou à disposição para ajudar!"
+      }
+    },
     "list": {
       "title": "Automações",
       "subtitle": "Crie fluxos de trabalho que reagem automaticamente a eventos do WhatsApp®.",
@@ -1052,6 +1093,43 @@
     }
   },
   "Flows": {
+    "templates": {
+      "welcomeMenu": {
+        "name": "Menu de boas-vindas",
+        "description": "Cumprimenta clientes que digitam uma palavra-chave e os direciona ao agente certo, dependendo se são novos ou já existentes.",
+        "welcomeText": "Oi! 👋 Bem-vindo ao suporte. Você já é cliente ou é a primeira vez por aqui?",
+        "welcomeFooter": "Toque em um botão abaixo para continuar.",
+        "existingBtn": "Já sou cliente",
+        "newBtn": "Cliente novo",
+        "existingHandoffNote": "Cliente já existente precisa de ajuda — verifique o histórico da conta antes de responder.",
+        "newHandoffNote": "Cliente novo — envie o link de preços e integração."
+      },
+      "faqBot": {
+        "name": "Bot de FAQ",
+        "description": "Responde perguntas comuns automaticamente. O cliente escolhe um tópico em uma lista; o bot responde e encerra.",
+        "topicsText": "Como posso ajudar?",
+        "topicsButtonLabel": "Ver tópicos",
+        "sectionCommon": "Perguntas comuns",
+        "rowHours": "Horário de funcionamento",
+        "rowPricing": "Preços",
+        "rowRefunds": "Política de reembolso",
+        "sectionOther": "Outros",
+        "rowHuman": "Falar com um humano",
+        "answerHours": "Funcionamos de segunda a sexta, das 9h às 18h no horário local. O suporte de fim de semana é limitado a questões urgentes.",
+        "answerPricing": "Nossos preços começam em US$ 9/mês. Acesse https://example.com/pricing para ver todos os detalhes.",
+        "answerRefunds": "Reembolsos são garantidos em até 30 dias após a compra. Responda com o número do seu pedido que processamos.",
+        "humanHandoffNote": "O cliente pediu para falar com um humano a partir do bot de FAQ."
+      },
+      "leadCapture": {
+        "name": "Captura de leads",
+        "description": "Cumprimenta contatos de primeira mensagem, coleta nome + e-mail + empresa, e depois repassa para vendas com as respostas na nota.",
+        "introText": "Bem-vindo! 👋 Vou fazer algumas perguntas rápidas para te direcionar à pessoa certa.",
+        "askNamePrompt": "Qual é o seu nome?",
+        "askEmailPrompt": "Obrigado, {{vars.name}}! Qual é o seu e-mail de trabalho?",
+        "askCompanyPrompt": "Já estamos quase lá — qual é o nome da sua empresa?",
+        "handoffNote": "Novo lead — nome={{vars.name}}, e-mail={{vars.email}}, empresa={{vars.company}}."
+      }
+    },
     "list": {
       "title": "Fluxos",
       "beta": "Beta",
@@ -1271,6 +1349,45 @@
       "modeRemove": "Remover",
       "tagPicked": "{mode} etiqueta {tag}…",
       "tagNone": "{mode} etiqueta (nenhuma escolhida)"
+    }
+  },
+  "Agents": {
+    "page": {
+      "title": "Agentes de IA",
+      "description": "Seu agente de IA com chave própria — configure e teste no playground antes que ele responda aos clientes na caixa de entrada.",
+      "tabPlayground": "Playground",
+      "tabSetup": "Configuração",
+      "tabUsage": "Uso"
+    },
+    "playground": {
+      "title": "Playground",
+      "subtitle": "— teste respostas como se você fosse um cliente",
+      "reset": "Redefinir",
+      "emptyHint": "Envie uma mensagem para ver como seu agente responderia.",
+      "emptyHintDetail": "Ele usa sua base de conhecimento e se comporta exatamente como o bot de resposta automática — incluindo o repasse.",
+      "goToSetup": "Ainda não configurou? Ir para Configuração",
+      "handoffNote": "Repassaria para um humano aqui",
+      "thinking": "Pensando…",
+      "inputPlaceholder": "Digite uma mensagem de cliente…",
+      "toastNotConfigured": "Nenhum agente configurado ainda — termine a Configuração primeiro.",
+      "toastNoReply": "Não foi possível obter uma resposta.",
+      "toastUnreachable": "Não foi possível conectar ao agente."
+    },
+    "usage": {
+      "title": "Uso de tokens",
+      "description": "Tokens gastos na sua chave de provedor por rascunhos e pelo bot de resposta automática. Só contagens — nenhum conteúdo de mensagem é armazenado aqui.",
+      "lastNDays": "Últimos {days} dias",
+      "noUsage": "Nenhum uso de IA nos últimos {days} dias ainda.",
+      "noUsageHint": "Isso se preenche conforme o assistente gera rascunhos e responde automaticamente.",
+      "totalTokens": "Total de tokens",
+      "llmCalls": "Chamadas ao LLM",
+      "autoReply": "Resposta automática",
+      "drafts": "Rascunhos",
+      "tokensPerDay": "Tokens por dia",
+      "byModel": "Por modelo",
+      "modelStats": "{tok} tok · {calls} {calls, plural, =1 {chamada} other {chamadas}}",
+      "truncatedNote": "Mostrando uma janela parcial — o uso é alto o suficiente pra que só os registros mais recentes sejam resumidos aqui.",
+      "toastFailedLoad": "Falha ao carregar o uso"
     }
   },
   "Settings": {

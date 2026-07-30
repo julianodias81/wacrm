@@ -67,238 +67,250 @@ export interface FlowTemplate {
   nodes: FlowTemplateNode[];
 }
 
+/** next-intl's `useTranslations`/`getTranslations` return type. Passed in
+ *  by the caller (client component or server route) so this module — a
+ *  plain data factory, not a component — never has to know which side
+ *  of the boundary it's running on. */
+export type Translate = (key: string, values?: Record<string, string | number>) => string;
+
+// Every template's user-facing copy (names, messages, button/row labels,
+// handoff notes) is resolved from Flows.templates.* at call time so a
+// cloned flow's stored content matches the deployment's locale — node
+// keys, reply_ids, and trigger keywords stay literal English since
+// they're internal identifiers, not copy shown to anyone.
+
 // ============================================================
 // 1. Welcome menu — the example from the owner's brief
 // ============================================================
-const WELCOME_MENU: FlowTemplate = {
-  slug: "welcome_menu",
-  name: "Welcome menu",
-  description:
-    "Greet customers who type a keyword and route them to the right agent based on whether they're new or existing.",
-  icon: "MessageSquare",
-  trigger_type: "keyword",
-  trigger_config: { keywords: ["support", "help", "hi"], match_type: "contains" },
-  entry_node_id: "start",
-  nodes: [
-    {
-      node_key: "start",
-      node_type: "start",
-      config: { next_node_key: "welcome" },
-    },
-    {
-      node_key: "welcome",
-      node_type: "send_buttons",
-      config: {
-        text: "Hi! 👋 Welcome to support. Are you an existing customer or new here?",
-        footer_text: "Tap a button below to continue.",
-        buttons: [
-          {
-            reply_id: "existing",
-            title: "Existing customer",
-            next_node_key: "existing_handoff",
-          },
-          {
-            reply_id: "new",
-            title: "New customer",
-            next_node_key: "new_handoff",
-          },
-        ],
-      } as SendButtonsNodeConfig,
-    },
-    {
-      node_key: "existing_handoff",
-      node_type: "handoff",
-      config: {
-        note: "Existing customer needs assistance — please check account history before replying.",
-      } as HandoffNodeConfig,
-    },
-    {
-      node_key: "new_handoff",
-      node_type: "handoff",
-      config: {
-        note: "New customer — share pricing + onboarding link.",
-      } as HandoffNodeConfig,
-    },
-  ],
-};
+function buildWelcomeMenu(t: Translate): FlowTemplate {
+  const tt = (key: string) => t(`templates.welcomeMenu.${key}`);
+  return {
+    slug: "welcome_menu",
+    name: tt("name"),
+    description: tt("description"),
+    icon: "MessageSquare",
+    trigger_type: "keyword",
+    trigger_config: { keywords: ["support", "help", "hi"], match_type: "contains" },
+    entry_node_id: "start",
+    nodes: [
+      {
+        node_key: "start",
+        node_type: "start",
+        config: { next_node_key: "welcome" },
+      },
+      {
+        node_key: "welcome",
+        node_type: "send_buttons",
+        config: {
+          text: tt("welcomeText"),
+          footer_text: tt("welcomeFooter"),
+          buttons: [
+            {
+              reply_id: "existing",
+              title: tt("existingBtn"),
+              next_node_key: "existing_handoff",
+            },
+            {
+              reply_id: "new",
+              title: tt("newBtn"),
+              next_node_key: "new_handoff",
+            },
+          ],
+        } as SendButtonsNodeConfig,
+      },
+      {
+        node_key: "existing_handoff",
+        node_type: "handoff",
+        config: { note: tt("existingHandoffNote") } as HandoffNodeConfig,
+      },
+      {
+        node_key: "new_handoff",
+        node_type: "handoff",
+        config: { note: tt("newHandoffNote") } as HandoffNodeConfig,
+      },
+    ],
+  };
+}
 
 // ============================================================
 // 2. FAQ bot — list-message answers, fully automated
 // ============================================================
-const FAQ_BOT: FlowTemplate = {
-  slug: "faq_bot",
-  name: "FAQ bot",
-  description:
-    "Answer common questions automatically. Customer picks a topic from a list; the bot replies with the answer and ends.",
-  icon: "HelpCircle",
-  trigger_type: "keyword",
-  trigger_config: {
-    keywords: ["faq", "question", "info"],
-    match_type: "contains",
-  },
-  entry_node_id: "start",
-  nodes: [
-    {
-      node_key: "start",
-      node_type: "start",
-      config: { next_node_key: "topics" },
+function buildFaqBot(t: Translate): FlowTemplate {
+  const tt = (key: string) => t(`templates.faqBot.${key}`);
+  return {
+    slug: "faq_bot",
+    name: tt("name"),
+    description: tt("description"),
+    icon: "HelpCircle",
+    trigger_type: "keyword",
+    trigger_config: {
+      keywords: ["faq", "question", "info"],
+      match_type: "contains",
     },
-    {
-      node_key: "topics",
-      node_type: "send_list",
-      config: {
-        text: "What can I help you with?",
-        button_label: "View topics",
-        sections: [
-          {
-            title: "Common questions",
-            rows: [
-              {
-                reply_id: "hours",
-                title: "Opening hours",
-                next_node_key: "answer_hours",
-              },
-              {
-                reply_id: "pricing",
-                title: "Pricing",
-                next_node_key: "answer_pricing",
-              },
-              {
-                reply_id: "refunds",
-                title: "Refund policy",
-                next_node_key: "answer_refunds",
-              },
-            ],
-          },
-          {
-            title: "Other",
-            rows: [
-              {
-                reply_id: "human",
-                title: "Talk to a human",
-                next_node_key: "human_handoff",
-              },
-            ],
-          },
-        ],
-      } as SendListNodeConfig,
-    },
-    {
-      node_key: "answer_hours",
-      node_type: "send_message",
-      config: {
-        text: "We're open Mon–Fri, 9am–6pm local time. Weekend support is limited to urgent issues.",
-        next_node_key: "end",
-      } as SendMessageNodeConfig,
-    },
-    {
-      node_key: "answer_pricing",
-      node_type: "send_message",
-      config: {
-        text: "Our pricing starts at $9/mo. Visit https://example.com/pricing for the full breakdown.",
-        next_node_key: "end",
-      } as SendMessageNodeConfig,
-    },
-    {
-      node_key: "answer_refunds",
-      node_type: "send_message",
-      config: {
-        text: "Refunds are honored within 30 days of purchase. Reply with your order number and we'll process it.",
-        next_node_key: "end",
-      } as SendMessageNodeConfig,
-    },
-    {
-      node_key: "human_handoff",
-      node_type: "handoff",
-      config: {
-        note: "Customer asked to talk to a human from the FAQ bot.",
-      } as HandoffNodeConfig,
-    },
-    {
-      node_key: "end",
-      node_type: "end",
-      config: {},
-    },
-  ],
-};
+    entry_node_id: "start",
+    nodes: [
+      {
+        node_key: "start",
+        node_type: "start",
+        config: { next_node_key: "topics" },
+      },
+      {
+        node_key: "topics",
+        node_type: "send_list",
+        config: {
+          text: tt("topicsText"),
+          button_label: tt("topicsButtonLabel"),
+          sections: [
+            {
+              title: tt("sectionCommon"),
+              rows: [
+                {
+                  reply_id: "hours",
+                  title: tt("rowHours"),
+                  next_node_key: "answer_hours",
+                },
+                {
+                  reply_id: "pricing",
+                  title: tt("rowPricing"),
+                  next_node_key: "answer_pricing",
+                },
+                {
+                  reply_id: "refunds",
+                  title: tt("rowRefunds"),
+                  next_node_key: "answer_refunds",
+                },
+              ],
+            },
+            {
+              title: tt("sectionOther"),
+              rows: [
+                {
+                  reply_id: "human",
+                  title: tt("rowHuman"),
+                  next_node_key: "human_handoff",
+                },
+              ],
+            },
+          ],
+        } as SendListNodeConfig,
+      },
+      {
+        node_key: "answer_hours",
+        node_type: "send_message",
+        config: {
+          text: tt("answerHours"),
+          next_node_key: "end",
+        } as SendMessageNodeConfig,
+      },
+      {
+        node_key: "answer_pricing",
+        node_type: "send_message",
+        config: {
+          text: tt("answerPricing"),
+          next_node_key: "end",
+        } as SendMessageNodeConfig,
+      },
+      {
+        node_key: "answer_refunds",
+        node_type: "send_message",
+        config: {
+          text: tt("answerRefunds"),
+          next_node_key: "end",
+        } as SendMessageNodeConfig,
+      },
+      {
+        node_key: "human_handoff",
+        node_type: "handoff",
+        config: { note: tt("humanHandoffNote") } as HandoffNodeConfig,
+      },
+      {
+        node_key: "end",
+        node_type: "end",
+        config: {},
+      },
+    ],
+  };
+}
 
 // ============================================================
 // 3. Lead capture — collect_input chain, ends in a handoff
 // ============================================================
-const LEAD_CAPTURE: FlowTemplate = {
-  slug: "lead_capture",
-  name: "Lead capture",
-  description:
-    "Greet first-time inbounds, capture name + email + company, then hand off to sales with the answers in the note.",
-  icon: "UserPlus",
-  trigger_type: "first_inbound_message",
-  trigger_config: {},
-  entry_node_id: "start",
-  nodes: [
-    {
-      node_key: "start",
-      node_type: "start",
-      config: { next_node_key: "intro" },
-    },
-    {
-      node_key: "intro",
-      node_type: "send_message",
-      config: {
-        text: "Welcome! 👋 I'll ask a few quick questions so we can get you to the right person.",
-        next_node_key: "ask_name",
-      } as SendMessageNodeConfig,
-    },
-    {
-      node_key: "ask_name",
-      node_type: "collect_input",
-      config: {
-        prompt_text: "What's your name?",
-        var_key: "name",
-        next_node_key: "ask_email",
-      } as CollectInputNodeConfig,
-    },
-    {
-      node_key: "ask_email",
-      node_type: "collect_input",
-      config: {
-        prompt_text: "Thanks {{vars.name}}! What's your work email?",
-        var_key: "email",
-        next_node_key: "ask_company",
-      } as CollectInputNodeConfig,
-    },
-    {
-      node_key: "ask_company",
-      node_type: "collect_input",
-      config: {
-        prompt_text: "Almost done — what's your company name?",
-        var_key: "company",
-        next_node_key: "handoff",
-      } as CollectInputNodeConfig,
-    },
-    {
-      node_key: "handoff",
-      node_type: "handoff",
-      config: {
-        note: "New lead — name={{vars.name}}, email={{vars.email}}, company={{vars.company}}.",
-      } as HandoffNodeConfig,
-    },
-  ],
-};
+function buildLeadCapture(t: Translate): FlowTemplate {
+  const tt = (key: string) => t(`templates.leadCapture.${key}`);
+  return {
+    slug: "lead_capture",
+    name: tt("name"),
+    description: tt("description"),
+    icon: "UserPlus",
+    trigger_type: "first_inbound_message",
+    trigger_config: {},
+    entry_node_id: "start",
+    nodes: [
+      {
+        node_key: "start",
+        node_type: "start",
+        config: { next_node_key: "intro" },
+      },
+      {
+        node_key: "intro",
+        node_type: "send_message",
+        config: {
+          text: tt("introText"),
+          next_node_key: "ask_name",
+        } as SendMessageNodeConfig,
+      },
+      {
+        node_key: "ask_name",
+        node_type: "collect_input",
+        config: {
+          prompt_text: tt("askNamePrompt"),
+          var_key: "name",
+          next_node_key: "ask_email",
+        } as CollectInputNodeConfig,
+      },
+      {
+        node_key: "ask_email",
+        node_type: "collect_input",
+        config: {
+          prompt_text: tt("askEmailPrompt"),
+          var_key: "email",
+          next_node_key: "ask_company",
+        } as CollectInputNodeConfig,
+      },
+      {
+        node_key: "ask_company",
+        node_type: "collect_input",
+        config: {
+          prompt_text: tt("askCompanyPrompt"),
+          var_key: "company",
+          next_node_key: "handoff",
+        } as CollectInputNodeConfig,
+      },
+      {
+        node_key: "handoff",
+        node_type: "handoff",
+        config: { note: tt("handoffNote") } as HandoffNodeConfig,
+      },
+    ],
+  };
+}
 
 // ============================================================
 // Registry
 // ============================================================
 
-const TEMPLATES: Record<string, FlowTemplate> = {
-  welcome_menu: WELCOME_MENU,
-  faq_bot: FAQ_BOT,
-  lead_capture: LEAD_CAPTURE,
-};
-
-export function getFlowTemplate(slug: string): FlowTemplate | null {
-  return TEMPLATES[slug] ?? null;
+function buildTemplates(t: Translate): Record<string, FlowTemplate> {
+  return {
+    welcome_menu: buildWelcomeMenu(t),
+    faq_bot: buildFaqBot(t),
+    lead_capture: buildLeadCapture(t),
+  };
 }
 
-export function listFlowTemplates(): FlowTemplate[] {
-  return Object.values(TEMPLATES);
+export function getFlowTemplate(slug: string, t: Translate): FlowTemplate | null {
+  return buildTemplates(t)[slug] ?? null;
+}
+
+export function listFlowTemplates(t: Translate): FlowTemplate[] {
+  return Object.values(buildTemplates(t));
 }
