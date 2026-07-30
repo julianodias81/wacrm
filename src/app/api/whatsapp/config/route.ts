@@ -514,16 +514,29 @@ export async function PATCH(request: Request) {
       )
     }
 
-    const { error } = await supabase
+    // `.select()` forces the response to include the updated row(s) so
+    // we can tell "RLS silently matched zero rows" (admin-only policy
+    // blocked a non-admin caller) apart from a genuine DB error — an
+    // update() with no error and zero rows would otherwise look like
+    // success to the client while nothing actually changed.
+    const { data, error } = await supabase
       .from('whatsapp_config')
       .update({ show_agent_name_in_messages })
       .eq('account_id', accountId)
+      .select('id')
 
     if (error) {
       console.error('Error updating whatsapp_config toggle:', error)
       return NextResponse.json(
         { error: 'Failed to update configuration' },
         { status: 500 },
+      )
+    }
+
+    if (!data || data.length === 0) {
+      return NextResponse.json(
+        { error: 'Only account admins and owners can change this setting.' },
+        { status: 403 },
       )
     }
 

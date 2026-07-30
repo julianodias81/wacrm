@@ -1690,7 +1690,8 @@
       "agentNameToggle": "Show agent name in outbound messages",
       "agentNameToggleDesc": "Adds the agent's name as a bold line above plain-text replies sent from the inbox. Doesn't apply to templates, broadcasts, or the public API.",
       "agentNameToggleSaved": "Setting updated",
-      "agentNameToggleError": "Failed to update setting"
+      "agentNameToggleError": "Failed to update setting",
+      "agentNameToggleForbidden": "Only account admins and owners can change this setting."
     },
     "sections": {
       "overview": "Overview",

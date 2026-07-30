@@ -1680,7 +1680,8 @@
       "agentNameToggle": "Mostrar nome do agente nas mensagens enviadas",
       "agentNameToggleDesc": "Adiciona o nome do agente como uma linha em negrito acima das respostas em texto simples enviadas pela caixa de entrada. Não se aplica a modelos, transmissões ou à API pública.",
       "agentNameToggleSaved": "Configuração atualizada",
-      "agentNameToggleError": "Falha ao atualizar a configuração"
+      "agentNameToggleError": "Falha ao atualizar a configuração",
+      "agentNameToggleForbidden": "Somente admins e proprietários da conta podem alterar essa configuração."
     },
     "sections": {
       "overview": "Visão geral",

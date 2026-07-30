@@ -1690,7 +1690,8 @@
       "agentNameToggle": "발신 메시지에 상담원 이름 표시",
       "agentNameToggleDesc": "받은 편지함에서 보낸 일반 텍스트 답장 위에 상담원 이름을 굵게 표시합니다. 템플릿, 브로드캐스트, 공개 API에는 적용되지 않습니다.",
       "agentNameToggleSaved": "설정이 업데이트되었습니다",
-      "agentNameToggleError": "설정을 업데이트하지 못했습니다"
+      "agentNameToggleError": "설정을 업데이트하지 못했습니다",
+      "agentNameToggleForbidden": "계정 관리자와 소유자만 이 설정을 변경할 수 있습니다."
     },
     "sections": {
       "overview": "개요",

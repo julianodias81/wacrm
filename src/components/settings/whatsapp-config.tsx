@@ -387,7 +387,11 @@ export function WhatsAppConfig() {
       });
       if (!res.ok) {
         setShowAgentName(!next);
-        toast.error(t('agentNameToggleError'));
+        toast.error(
+          res.status === 403
+            ? t('agentNameToggleForbidden')
+            : t('agentNameToggleError'),
+        );
         return;
       }
       toast.success(t('agentNameToggleSaved'));
