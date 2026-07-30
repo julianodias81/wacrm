@@ -1634,7 +1634,43 @@
       "useMode": "Usar modo {mode}",
       "active": "Ativo",
       "accentColor": "Cor de destaque",
-      "useTheme": "Usar o tema {name}"
+      "useTheme": "Usar o tema {name}",
+      "modeLight": "Claro",
+      "modeDark": "Escuro",
+      "themeNames": {
+        "violet": "Violeta",
+        "emerald": "Esmeralda",
+        "cobalt": "Cobalto",
+        "amber": "Âmbar",
+        "rose": "Rosa"
+      },
+      "themeTaglines": {
+        "violet": "O padrão — confiante, com um toque de descontração.",
+        "emerald": "Remete ao crescimento, sem copiar o verde do WhatsApp.",
+        "cobalt": "Azul limpo de B2B SaaS — calmo e com cara de produto.",
+        "amber": "Caloroso e amigável — cai bem para equipes de pequenas empresas.",
+        "rose": "Ousado e moderno — D2C, economia criativa, estilo de vida."
+      }
+    },
+    "quickReplies": {
+      "title": "Respostas rápidas",
+      "description": "Trechos reutilizáveis — texto simples ou uma mensagem interativa salva — que os agentes podem inserir no compositor da caixa de entrada.",
+      "newQuickReply": "Nova resposta rápida",
+      "editQuickReply": "Editar resposta rápida",
+      "noQuickRepliesYet": "Nenhuma resposta rápida ainda. Crie uma para reutilizar em várias conversas.",
+      "nameLabel": "Nome",
+      "namePlaceholder": "ex.: Horário de atendimento",
+      "textTab": "Texto",
+      "interactiveTab": "Interativa",
+      "contentPlaceholder": "O texto da mensagem a ser inserido",
+      "cancel": "Cancelar",
+      "save": "Salvar",
+      "deleteConfirm": "Excluir esta resposta rápida?",
+      "toastNameRequired": "Dê um nome à resposta rápida.",
+      "toastSaveFailed": "Não foi possível salvar a resposta rápida.",
+      "toastUpdated": "Resposta rápida atualizada.",
+      "toastCreated": "Resposta rápida criada.",
+      "toastDeleteFailed": "Não foi possível excluir a resposta rápida."
     },
     "security": {
       "title": "Login e segurança",

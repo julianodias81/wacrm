@@ -1646,7 +1646,43 @@
       "useMode": "{mode} 모드 사용",
       "active": "사용 중",
       "accentColor": "강조 색상",
-      "useTheme": "{name} 테마 사용"
+      "useTheme": "{name} 테마 사용",
+      "modeLight": "라이트",
+      "modeDark": "다크",
+      "themeNames": {
+        "violet": "바이올렛",
+        "emerald": "에메랄드",
+        "cobalt": "코발트",
+        "amber": "앰버",
+        "rose": "로즈"
+      },
+      "themeTaglines": {
+        "violet": "기본값 — 자신감 있고 약간 유쾌한 느낌.",
+        "emerald": "성장 지향적인 느낌, WhatsApp 초록을 따라하지 않으면서 메시징을 연상시킵니다.",
+        "cobalt": "깔끔한 B2B SaaS 블루 — 차분하고 제품다운 느낌.",
+        "amber": "따뜻하고 친근한 느낌 — 중소기업 팀에 잘 어울립니다.",
+        "rose": "대담하고 현대적인 느낌 — D2C, 크리에이터 이코노미, 라이프스타일에 적합."
+      }
+    },
+    "quickReplies": {
+      "title": "빠른 답장",
+      "description": "받은 편지함 작성기에서 상담원이 삽입할 수 있는 재사용 가능한 스니펫 — 일반 텍스트 또는 저장된 인터랙티브 메시지입니다.",
+      "newQuickReply": "새 빠른 답장",
+      "editQuickReply": "빠른 답장 편집",
+      "noQuickRepliesYet": "아직 빠른 답장이 없습니다. 하나를 만들어 대화 전반에서 재사용하세요.",
+      "nameLabel": "이름",
+      "namePlaceholder": "예: 영업시간",
+      "textTab": "텍스트",
+      "interactiveTab": "인터랙티브",
+      "contentPlaceholder": "삽입할 메시지 텍스트",
+      "cancel": "취소",
+      "save": "저장",
+      "deleteConfirm": "이 빠른 답장을 삭제하시겠습니까?",
+      "toastNameRequired": "빠른 답장에 이름을 지정하세요.",
+      "toastSaveFailed": "빠른 답장을 저장할 수 없습니다.",
+      "toastUpdated": "빠른 답장이 업데이트되었습니다.",
+      "toastCreated": "빠른 답장이 생성되었습니다.",
+      "toastDeleteFailed": "빠른 답장을 삭제할 수 없습니다."
     },
     "security": {
       "title": "로그인 & 보안",

@@ -1646,7 +1646,43 @@
       "useMode": "Use {mode} mode",
       "active": "Active",
       "accentColor": "Accent color",
-      "useTheme": "Use {name} theme"
+      "useTheme": "Use {name} theme",
+      "modeLight": "Light",
+      "modeDark": "Dark",
+      "themeNames": {
+        "violet": "Violet",
+        "emerald": "Emerald",
+        "cobalt": "Cobalt",
+        "amber": "Amber",
+        "rose": "Rose"
+      },
+      "themeTaglines": {
+        "violet": "The default — confident, slightly playful.",
+        "emerald": "Growth-coded, nods at messaging without copying WhatsApp green.",
+        "cobalt": "Clean B2B-SaaS blue — calm and product-y.",
+        "amber": "Warm and friendly — feels good for SMB teams.",
+        "rose": "Bold and modern — D2C, creator-economy, lifestyle."
+      }
+    },
+    "quickReplies": {
+      "title": "Quick replies",
+      "description": "Reusable snippets — plain text or a saved interactive message — that agents can insert from the inbox composer.",
+      "newQuickReply": "New quick reply",
+      "editQuickReply": "Edit quick reply",
+      "noQuickRepliesYet": "No quick replies yet. Create one to reuse it across conversations.",
+      "nameLabel": "Name",
+      "namePlaceholder": "e.g. Business hours",
+      "textTab": "Text",
+      "interactiveTab": "Interactive",
+      "contentPlaceholder": "The message text to insert",
+      "cancel": "Cancel",
+      "save": "Save",
+      "deleteConfirm": "Delete this quick reply?",
+      "toastNameRequired": "Give the quick reply a name.",
+      "toastSaveFailed": "Couldn't save the quick reply.",
+      "toastUpdated": "Quick reply updated.",
+      "toastCreated": "Quick reply created.",
+      "toastDeleteFailed": "Couldn't delete the quick reply."
     },
     "security": {
       "title": "Login & security",

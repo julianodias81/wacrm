@@ -42,6 +42,7 @@ export function SettingsOverview({
   const t = useTranslations('Settings.overview');
   const tRoles = useTranslations('Settings.roles');
   const tSections = useTranslations('Settings.sections');
+  const tAppearance = useTranslations('Settings.appearance');
 
   const [counts, setCounts] = useState<OverviewCounts | null>(null);
   const [countsLoading, setCountsLoading] = useState(true);
@@ -148,8 +149,9 @@ export function SettingsOverview({
 
   const currencyLabel =
     CURRENCIES.find((c) => c.code === defaultCurrency)?.label ?? defaultCurrency;
-  const themeName = THEMES.find((t) => t.id === theme)?.name ?? theme;
-  const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+  const themeId = THEMES.find((th) => th.id === theme)?.id;
+  const themeName = themeId ? tAppearance(`themeNames.${themeId}`) : theme;
+  const modeName = mode === 'light' ? tAppearance('modeLight') : tAppearance('modeDark');
 
   // Per-tile loading + subtitle. `null` counts render as a graceful
   // fallback so a single failed query never blanks a tile.
@@ -215,7 +217,7 @@ export function SettingsOverview({
     {
       section: 'appearance',
       loading: false,
-      subtitle: t('appearance', { mode: cap(mode), theme: themeName }),
+      subtitle: t('appearance', { mode: modeName, theme: themeName }),
     },
   ];
 
