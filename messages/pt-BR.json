@@ -1088,6 +1088,7 @@
         "placeholderTime": "HH:mm-HH:mm",
         "placeholderContact": "nome / e-mail / empresa",
         "placeholderTag": "id da etiqueta",
+        "placeholderMessageContent": "palavra ou frase a buscar",
         "urlLabel": "URL",
         "headersLabel": "Cabeçalhos",
         "placeholderHeaders": "{\"Authorization\": \"Bearer ...\"}",

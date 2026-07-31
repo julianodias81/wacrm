@@ -1088,6 +1088,7 @@
         "placeholderTime": "HH:mm-HH:mm",
         "placeholderContact": "이름 / 이메일 / 회사",
         "placeholderTag": "태그 id",
+        "placeholderMessageContent": "찾을 단어 또는 문구",
         "urlLabel": "URL",
         "headersLabel": "헤더",
         "placeholderHeaders": "{\"Authorization\": \"Bearer ...\"}",

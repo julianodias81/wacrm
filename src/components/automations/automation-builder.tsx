@@ -1434,25 +1434,32 @@ function StepEditor({
               <option value="time_of_day">{t("config.subjects.time_of_day")}</option>
             </select>
           </FieldBlock>
-          <FieldBlock label={t("config.operandLabel")}>
-            <Input
-              placeholder={
-                cfg.subject === "time_of_day"
-                  ? t("config.placeholderTime")
-                  : cfg.subject === "contact_field"
-                  ? t("config.placeholderContact")
-                  : cfg.subject === "tag_presence"
-                  ? t("config.placeholderTag")
-                  : ""
-              }
-              value={(cfg.operand as string) ?? ""}
-              onChange={(e) => set({ operand: e.target.value })}
-              className="bg-muted text-foreground"
-            />
-          </FieldBlock>
-          {(cfg.subject === "contact_field" || cfg.subject === "message_content") && (
-            <FieldBlock label="Value">
+          {cfg.subject !== "message_content" && (
+            <FieldBlock label={t("config.operandLabel")}>
               <Input
+                placeholder={
+                  cfg.subject === "time_of_day"
+                    ? t("config.placeholderTime")
+                    : cfg.subject === "contact_field"
+                    ? t("config.placeholderContact")
+                    : cfg.subject === "tag_presence"
+                    ? t("config.placeholderTag")
+                    : ""
+                }
+                value={(cfg.operand as string) ?? ""}
+                onChange={(e) => set({ operand: e.target.value })}
+                className="bg-muted text-foreground"
+              />
+            </FieldBlock>
+          )}
+          {(cfg.subject === "contact_field" || cfg.subject === "message_content") && (
+            <FieldBlock label={t("config.valueLabel")}>
+              <Input
+                placeholder={
+                  cfg.subject === "message_content"
+                    ? t("config.placeholderMessageContent")
+                    : undefined
+                }
                 value={(cfg.value as string) ?? ""}
                 onChange={(e) => set({ value: e.target.value })}
                 className="bg-muted text-foreground"
