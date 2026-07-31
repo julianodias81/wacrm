@@ -267,7 +267,8 @@
       "deletingConversation": "삭제 중…",
       "deleteConversationBtn": "대화 삭제",
       "toastConversationDeleted": "대화가 삭제되었습니다",
-      "toastDeleteConversationFailed": "대화를 삭제하지 못했습니다"
+      "toastDeleteConversationFailed": "대화를 삭제하지 못했습니다",
+      "handoffNoteTitle": "인계 메모"
     },
     "sessionTimer": {
       "expired": "만료됨",

@@ -441,6 +441,10 @@ async function executeHandoff(
   const convUpdate: Record<string, unknown> = {
     status: "pending",
     updated_at: new Date().toISOString(),
+    // Surfaced in the inbox banner (message-thread.tsx) — always synced,
+    // not just set, so a handoff without a note clears a stale one left
+    // by a previous handoff on this same conversation.
+    handoff_note: cfg.note || null,
   };
   if (cfg.assign_to) convUpdate.assigned_agent_id = cfg.assign_to;
   if (run.conversation_id) {

@@ -267,7 +267,8 @@
       "deletingConversation": "Deleting…",
       "deleteConversationBtn": "Delete conversation",
       "toastConversationDeleted": "Conversation deleted",
-      "toastDeleteConversationFailed": "Failed to delete conversation"
+      "toastDeleteConversationFailed": "Failed to delete conversation",
+      "handoffNoteTitle": "Handoff note"
     },
     "sessionTimer": {
       "expired": "Expired",

@@ -175,7 +175,7 @@ export function AiThreadBanner({
   );
 }
 
-function Banner({
+export function Banner({
   tone,
   children,
 }: {

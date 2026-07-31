@@ -181,6 +181,13 @@ export interface Conversation {
   ai_autoreply_disabled?: boolean;
   ai_reply_count?: number;
   ai_handoff_summary?: string | null;
+  /**
+   * Note left by a Flow's Handoff node when it assigns the conversation
+   * to a human (migration 039). Shown to whoever opens the thread —
+   * distinct from `ai_handoff_summary`, which is AI-bot-specific and
+   * only surfaces when the account has auto-reply configured.
+   */
+  handoff_note?: string | null;
 }
 
 // ============================================================

@@ -267,7 +267,8 @@
       "deletingConversation": "Excluindo…",
       "deleteConversationBtn": "Excluir conversa",
       "toastConversationDeleted": "Conversa excluída",
-      "toastDeleteConversationFailed": "Falha ao excluir a conversa"
+      "toastDeleteConversationFailed": "Falha ao excluir a conversa",
+      "handoffNoteTitle": "Nota de transferência"
     },
     "sessionTimer": {
       "expired": "Expirado",

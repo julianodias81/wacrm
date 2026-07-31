@@ -60,7 +60,7 @@ import {
 } from "./message-composer";
 import { deleteAccountMedia } from "@/lib/storage/upload-media";
 import { TemplatePicker } from "./template-picker";
-import { AiThreadBanner } from "./ai-thread-banner";
+import { AiThreadBanner, Banner } from "./ai-thread-banner";
 import { buildReplyPreview } from "./reply-quote";
 import { toast } from "sonner";
 
@@ -1235,6 +1235,20 @@ export function MessageThread({
           </div>
         )}
       </div>
+
+      {/* Flow handoff note — always shown when set, regardless of AI
+          auto-reply config (unlike the AI banner below). No dismiss
+          action; the next handoff on this conversation overwrites it. */}
+      {conversation.handoff_note && (
+        <Banner tone="muted">
+          <div className="min-w-0 flex-1">
+            <p className="font-medium text-foreground">{t("handoffNoteTitle")}</p>
+            <p className="truncate text-muted-foreground" title={conversation.handoff_note}>
+              {conversation.handoff_note}
+            </p>
+          </div>
+        </Banner>
+      )}
 
       {/* AI auto-reply banner — take over an active bot, or resume it
           after a handoff. Renders nothing unless the account has
