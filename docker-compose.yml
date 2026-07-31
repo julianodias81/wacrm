@@ -20,8 +20,15 @@ services:
     # here because `environment` wins over `env_file`, so a stray PORT
     # in .env.local can't desync the app from the mapping and the
     # healthcheck below.
+    #
+    # TZ matters beyond log timestamps: automation "time of day"
+    # conditions read the server's local hour (Date#getHours), so
+    # without this they'd evaluate business-hours windows against UTC
+    # instead of the account's actual timezone. Override via .env.local
+    # if a deployment ever needs a different one.
     environment:
       PORT: 3000
+      TZ: ${TZ:-America/Sao_Paulo}
     # Host side only — HOST_PORT=8080 publishes the app on :8080.
     ports:
       - '${HOST_PORT:-3000}:3000'
