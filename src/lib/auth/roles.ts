@@ -107,3 +107,8 @@ export function canDeleteAccount(role: AccountRole): boolean {
 export function canTransferOwnership(role: AccountRole): boolean {
   return role === "owner";
 }
+
+/** Owner only: deleting a conversation wipes its message history. */
+export function canDeleteConversation(role: AccountRole): boolean {
+  return role === "owner";
+}

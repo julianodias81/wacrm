@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
+import { useCan } from "@/hooks/use-can";
 import { usePresence } from "@/hooks/use-presence";
 import { PresenceDot } from "@/components/presence/presence-dot";
 import { presenceLabel } from "@/lib/presence";
@@ -27,10 +28,21 @@ import {
   RefreshCw,
   PanelRightOpen,
   PanelRightClose,
+  Trash2,
+  Loader2,
 } from "lucide-react";
 import { format, isToday, isYesterday, differenceInHours } from "date-fns";
 import { useTranslations } from "next-intl";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -109,6 +121,13 @@ interface MessageThreadProps {
    */
   contactPanelOpen?: boolean;
   onToggleContactPanel?: () => void;
+  /**
+   * Fired after a successful conversation delete so the parent can
+   * drop it from the list state and, if it was the active thread,
+   * clear the selection. Owner-only — the delete button itself is
+   * gated on `useCan("delete-conversation")`.
+   */
+  onConversationDeleted?: (conversationId: string) => void;
 }
 
 function formatDateSeparator(dateStr: string, t: ReturnType<typeof useTranslations>): string {
@@ -167,12 +186,16 @@ export function MessageThread({
   onRefresh,
   contactPanelOpen,
   onToggleContactPanel,
+  onConversationDeleted,
 }: MessageThreadProps) {
   const t = useTranslations("Inbox.messageThread");
   const tTimer = useTranslations("Inbox.sessionTimer");
   const tQuote = useTranslations("Inbox.replyQuote");
 
   const { user } = useAuth();
+  const canDeleteConversation = useCan("delete-conversation");
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [deletingConversation, setDeletingConversation] = useState(false);
   const { getPresence, getRow, now } = usePresence();
   const [loading, setLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -838,6 +861,32 @@ export function MessageThread({
     [conversation, onAssignChange],
   );
 
+  // Owner-only, unlike the mutations above — goes through the dedicated
+  // API route (not a direct Supabase update) so `requireRole('owner')`
+  // can return a clear 403 message rather than relying on RLS to
+  // silently no-op for a non-owner caller.
+  const handleDeleteConversation = useCallback(async () => {
+    if (!conversation) return;
+    setDeletingConversation(true);
+    try {
+      const res = await fetch(`/api/conversations/${conversation.id}`, {
+        method: "DELETE",
+      });
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        toast.error(body?.error ?? t("toastDeleteConversationFailed"));
+        return;
+      }
+      toast.success(t("toastConversationDeleted"));
+      setDeleteDialogOpen(false);
+      onConversationDeleted?.(conversation.id);
+    } catch {
+      toast.error(t("toastDeleteConversationFailed"));
+    } finally {
+      setDeletingConversation(false);
+    }
+  }, [conversation, onConversationDeleted, t]);
+
   // Empty state — same WhatsApp-style doodle background as the active
   // thread below, so swapping between empty/selected doesn't change the
   // pattern under the user's eye.
@@ -1054,8 +1103,62 @@ export function MessageThread({
               )}
             </DropdownMenuContent>
           </DropdownMenu>
+
+          {/* Delete conversation — owner-only, irreversible. */}
+          {canDeleteConversation && (
+            <button
+              type="button"
+              onClick={() => setDeleteDialogOpen(true)}
+              aria-label={t("deleteConversation")}
+              title={t("deleteConversation")}
+              className="inline-flex h-7 w-7 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-red-500/10 hover:text-red-400"
+            >
+              <Trash2 className="h-3.5 w-3.5" />
+            </button>
+          )}
         </div>
       </div>
+
+      {/* Delete conversation confirmation */}
+      <Dialog
+        open={deleteDialogOpen}
+        onOpenChange={(open) => !deletingConversation && setDeleteDialogOpen(open)}
+      >
+        <DialogContent className="bg-popover border-border">
+          <DialogHeader>
+            <DialogTitle className="text-popover-foreground">
+              {t("deleteConversationTitle")}
+            </DialogTitle>
+            <DialogDescription className="text-muted-foreground">
+              {t("deleteConversationDesc")}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="bg-popover border-border">
+            <Button
+              variant="outline"
+              onClick={() => setDeleteDialogOpen(false)}
+              disabled={deletingConversation}
+              className="border-border text-popover-foreground hover:bg-muted"
+            >
+              {t("cancel")}
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={handleDeleteConversation}
+              disabled={deletingConversation}
+            >
+              {deletingConversation ? (
+                <>
+                  <Loader2 className="size-4 animate-spin" />
+                  {t("deletingConversation")}
+                </>
+              ) : (
+                t("deleteConversationBtn")
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Messages Area */}
       <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-4">
