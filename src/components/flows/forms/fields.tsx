@@ -49,11 +49,13 @@ export function TextRow({
   value,
   onChange,
   rows = 1,
+  maxLength,
 }: {
   label: string;
   value: string;
   onChange: (v: string) => void;
   rows?: number;
+  maxLength?: number;
 }) {
   return (
     <div>
@@ -63,12 +65,14 @@ export function TextRow({
           value={value}
           onChange={(e) => onChange(e.target.value)}
           rows={rows}
+          maxLength={maxLength}
           className="bg-muted"
         />
       ) : (
         <Input
           value={value}
           onChange={(e) => onChange(e.target.value)}
+          maxLength={maxLength}
           className="bg-muted"
         />
       )}

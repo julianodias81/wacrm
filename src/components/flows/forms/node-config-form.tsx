@@ -287,6 +287,7 @@ function SendButtonsForm({
         label={t("footerText")}
         value={cfg.footer_text ?? ""}
         onChange={(v) => onUpdateConfig({ footer_text: v })}
+        maxLength={60}
       />
       <div>
         <div className="mb-2 flex items-center justify-between">
@@ -479,11 +480,13 @@ function SendListForm({
           label={t("buttonLabel")}
           value={cfg.button_label ?? ""}
           onChange={(v) => onUpdateConfig({ button_label: v })}
+          maxLength={20}
         />
         <TextRow
           label={t("footerText")}
           value={cfg.footer_text ?? ""}
           onChange={(v) => onUpdateConfig({ footer_text: v })}
+          maxLength={60}
         />
       </div>
 
