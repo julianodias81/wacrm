@@ -65,7 +65,14 @@ export function formatCurrency(
   const code = (currency || DEFAULT_CURRENCY).trim();
   const amount = Number(value) || 0;
   try {
-    return new Intl.NumberFormat(undefined, {
+    // Locale pinned to "en-US", not `undefined` (host default). With
+    // `undefined`, grouping/symbol placement silently follows whatever
+    // locale the OS/container reports — the same deal value would
+    // render as "$1,234" on one deployment and "1.234 US$" on another.
+    // Pinning keeps the number format deterministic across every
+    // environment regardless of NEXT_PUBLIC_APP_LOCALE; only the
+    // currency itself (symbol, code) varies with the account/deal.
+    return new Intl.NumberFormat("en-US", {
       style: "currency",
       currency: code,
       minimumFractionDigits: 0,
@@ -74,7 +81,7 @@ export function formatCurrency(
   } catch {
     // Invalid ISO code — show the raw code + grouped number so the
     // value is still legible instead of throwing.
-    return `${code} ${new Intl.NumberFormat(undefined, {
+    return `${code} ${new Intl.NumberFormat("en-US", {
       maximumFractionDigits: 0,
     }).format(amount)}`;
   }
