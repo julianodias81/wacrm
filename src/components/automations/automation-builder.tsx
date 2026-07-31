@@ -1011,11 +1011,11 @@ function InteractiveReplyConfig({
 // Step list + card + connectors
 // ------------------------------------------------------------
 
-type ParentScope =
+export type ParentScope =
   | { kind: "root" }
   | { kind: "branch"; parentCid: string; branch: "yes" | "no" }
 
-type StepPath = (
+export type StepPath = (
   | { kind: "root"; index: number }
   | { kind: "branch"; parentCid: string; branch: "yes" | "no"; index: number }
 )[]
@@ -1075,12 +1075,20 @@ function StepRenderer({
   parentPath: StepPath
 } & Omit<StepListProps, "steps" | "parentPath">) {
   const t = useTranslations("Automations.builder")
-  const path: StepPath = [
-    ...parentPath,
+  // For a branch scope, `parentPath`'s last element is the placeholder
+  // marker ConditionBranches appended (index 0, "replaced per child during
+  // walks" per its comment) — replace it with this child's real index
+  // rather than appending a second marker. Appending produced a path one
+  // segment too long, so mapAtPath/walkBranches always recursed one level
+  // past the target and never reached `updater`: editing, moving, or
+  // deleting any step nested in a yes/no branch silently no-opped.
+  const path: StepPath =
     parentScope.kind === "root"
-      ? { kind: "root", index }
-      : { kind: "branch", parentCid: parentScope.parentCid, branch: parentScope.branch, index },
-  ]
+      ? [...parentPath, { kind: "root", index }]
+      : [
+          ...parentPath.slice(0, -1),
+          { kind: "branch", parentCid: parentScope.parentCid, branch: parentScope.branch, index },
+        ]
   const meta = STEP_META[step.step_type]
   const Icon = meta.icon
   const expanded = props.expandedId === step.cid
@@ -1537,7 +1545,7 @@ function previewFor(step: BuilderStep): string {
 // Tree mutation helpers
 // ------------------------------------------------------------
 
-function insertAt(
+export function insertAt(
   steps: BuilderStep[],
   parent: ParentScope,
   index: number,
@@ -1556,7 +1564,7 @@ function insertAt(
   })
 }
 
-function mapAtPath(
+export function mapAtPath(
   steps: BuilderStep[],
   path: StepPath,
   updater: (s: BuilderStep) => BuilderStep,
