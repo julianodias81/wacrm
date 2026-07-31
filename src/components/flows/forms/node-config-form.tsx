@@ -48,7 +48,13 @@ import {
 import { cn } from "@/lib/utils";
 import { uploadAccountMedia, MEDIA_MAX_BYTES } from "@/lib/storage/upload-media";
 import { slugify, type BuilderNode } from "../shared";
-import { AgentSelectRow, NextNodeRow, NodeKeySelect, TextRow } from "./fields";
+import {
+  AgentSelectRow,
+  NextNodeRow,
+  NodeKeySelect,
+  selectLabelFn,
+  TextRow,
+} from "./fields";
 
 interface NodeConfigFormProps {
   node: BuilderNode;
@@ -641,7 +647,16 @@ function ConditionForm({
             }
           >
             <SelectTrigger className="bg-muted">
-              <SelectValue />
+              <SelectValue>
+                {selectLabelFn(
+                  [
+                    { value: "var", label: t("capturedVariable") },
+                    { value: "tag", label: t("contactHasTag") },
+                    { value: "contact_field", label: t("contactField") },
+                  ],
+                  "",
+                )}
+              </SelectValue>
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="var">{t("capturedVariable")}</SelectItem>
@@ -664,7 +679,12 @@ function ConditionForm({
               onValueChange={(v) => onUpdateConfig({ subject_key: v })}
             >
               <SelectTrigger className="bg-muted">
-                <SelectValue placeholder="Pick a tag…" />
+                <SelectValue>
+                  {selectLabelFn(
+                    tags.map((tg) => ({ value: tg.id, label: tg.name })),
+                    "Pick a tag…",
+                  )}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent>
                 {tags.map((t) => (
@@ -717,7 +737,17 @@ function ConditionForm({
             }
           >
             <SelectTrigger className="bg-muted">
-              <SelectValue />
+              <SelectValue>
+                {selectLabelFn(
+                  [
+                    { value: "present", label: t("isPresent") },
+                    { value: "absent", label: t("isAbsent") },
+                    { value: "equals", label: t("equals") },
+                    { value: "contains", label: t("contains") },
+                  ],
+                  "",
+                )}
+              </SelectValue>
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="present">{t("isPresent")}</SelectItem>
@@ -796,7 +826,15 @@ function SetTagForm({
             }
           >
             <SelectTrigger className="bg-muted">
-              <SelectValue />
+              <SelectValue>
+                {selectLabelFn(
+                  [
+                    { value: "add", label: t("addTag") },
+                    { value: "remove", label: t("removeTag") },
+                  ],
+                  "",
+                )}
+              </SelectValue>
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="add">{t("addTag")}</SelectItem>
@@ -812,7 +850,12 @@ function SetTagForm({
               onValueChange={(v) => onUpdateConfig({ tag_id: v })}
             >
               <SelectTrigger className="bg-muted">
-                <SelectValue placeholder="Pick a tag…" />
+                <SelectValue>
+                  {selectLabelFn(
+                    tags.map((tg) => ({ value: tg.id, label: tg.name })),
+                    "Pick a tag…",
+                  )}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent>
                 {tags.map((t) => (
@@ -968,7 +1011,16 @@ function SendMediaForm({
           }}
         >
           <SelectTrigger className="bg-muted">
-            <SelectValue />
+            <SelectValue>
+              {selectLabelFn(
+                [
+                  { value: "image", label: t("imageLabel") },
+                  { value: "video", label: t("videoLabel") },
+                  { value: "document", label: t("documentLabel") },
+                ],
+                "",
+              )}
+            </SelectValue>
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="image">{t("imageLabel")}</SelectItem>

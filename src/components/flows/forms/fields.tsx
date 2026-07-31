@@ -32,6 +32,18 @@ import { cn } from "@/lib/utils";
 import { useTranslations } from "next-intl";
 import { NODE_META, type BuilderNode } from "../shared";
 
+/** Base UI's SelectValue never reads a SelectItem's rendered text — it
+ *  only knows a label if given one explicitly. This builds that lookup
+ *  as a `children` render-fn, keyed by value. See AgentSelectRow's
+ *  original bug: after picking an agent, the field showed the raw
+ *  user_id UUID instead of the name. */
+export function selectLabelFn(
+  items: { value: string; label: string }[],
+  placeholder: string,
+): (v: string) => string {
+  return (v) => items.find((i) => i.value === v)?.label ?? placeholder;
+}
+
 export function TextRow({
   label,
   value,
@@ -136,7 +148,18 @@ export function AgentSelectRow({
         onValueChange={(v) => onChange(v === "__none__" ? "" : (v ?? ""))}
       >
         <SelectTrigger className="bg-muted">
-          <SelectValue placeholder={t("noAssignment")} />
+          <SelectValue>
+            {selectLabelFn(
+              [
+                { value: "__none__", label: t("noAssignment") },
+                ...members.map((m) => ({
+                  value: m.user_id,
+                  label: m.full_name || m.email || m.user_id,
+                })),
+              ],
+              t("noAssignment"),
+            )}
+          </SelectValue>
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="__none__">{t("noAssignment")}</SelectItem>
@@ -174,7 +197,15 @@ export function NodeKeySelect({
       onValueChange={(v) => onChange(v === "__none__" ? null : v)}
     >
       <SelectTrigger className={cn("bg-muted", className)}>
-        <SelectValue placeholder={placeholder ?? "—"} />
+        <SelectValue>
+          {selectLabelFn(
+            [
+              { value: "__none__", label: t("none") },
+              ...options.map((n) => ({ value: n.node_key, label: n.node_key })),
+            ],
+            placeholder ?? "—",
+          )}
+        </SelectValue>
       </SelectTrigger>
       <SelectContent>
         <SelectItem value="__none__">{t("none")}</SelectItem>
