@@ -1556,11 +1556,25 @@ export function insertAt(
     copy.splice(index, 0, node)
     return copy
   }
+  // `parent.parentCid` may belong to a condition nested at any depth (a
+  // condition inside another condition's branch), not just a root-level
+  // one — recurse into every branch bucket so the target is found
+  // regardless of nesting. cids are unique, so a plain recursive search
+  // by cid is unambiguous without needing the full ancestor path.
   return steps.map((s) => {
-    if (s.cid !== parent.parentCid || !s.branches) return s
-    const list = [...s.branches[parent.branch]]
-    list.splice(index, 0, node)
-    return { ...s, branches: { ...s.branches, [parent.branch]: list } }
+    if (s.cid === parent.parentCid && s.branches) {
+      const list = [...s.branches[parent.branch]]
+      list.splice(index, 0, node)
+      return { ...s, branches: { ...s.branches, [parent.branch]: list } }
+    }
+    if (!s.branches) return s
+    return {
+      ...s,
+      branches: {
+        yes: insertAt(s.branches.yes, parent, index, node),
+        no: insertAt(s.branches.no, parent, index, node),
+      },
+    }
   })
 }
 

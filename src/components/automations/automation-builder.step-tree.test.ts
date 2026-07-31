@@ -12,9 +12,9 @@ import {
 // built for a branch child carried one segment too many, so mapAtPath
 // always recursed one level past the target and never reached `updater`.
 
-function condition(): BuilderStep {
+function condition(cid = "c_cond"): BuilderStep {
   return {
-    cid: "c_cond",
+    cid,
     step_type: "condition",
     step_config: { subject: "time_of_day" },
     branches: { yes: [], no: [] },
@@ -71,5 +71,29 @@ describe("condition branch step tree", () => {
 
     expect(steps[0].branches?.no[0].step_config.text).toBe("first");
     expect(steps[0].branches?.no[1].step_config.text).toBe("second-edited");
+  });
+
+  it("inserts a step into a condition nested inside another condition's branch", () => {
+    // Condition A at root; condition B lives in A's "yes" branch.
+    let steps = [condition("c_a")];
+    steps = insertAt(
+      steps,
+      { kind: "branch", parentCid: "c_a", branch: "yes" },
+      0,
+      condition("c_b"),
+    );
+
+    // Adding into B's own "no" branch requires insertAt to find B even
+    // though B itself is nested, not a root-level step.
+    steps = insertAt(
+      steps,
+      { kind: "branch", parentCid: "c_b", branch: "no" },
+      0,
+      message("c_b_no_msg", "deep"),
+    );
+
+    const condB = steps[0].branches?.yes[0];
+    expect(condB?.cid).toBe("c_b");
+    expect(condB?.branches?.no[0]?.step_config.text).toBe("deep");
   });
 });
