@@ -18,6 +18,7 @@
  * (introduced in this PR) mount the exact same form components.
  */
 
+import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -86,6 +87,66 @@ export function NextNodeRow({
         onChange={(v) => onChange(v ?? "")}
         placeholder={useTranslations("Flows.builder.form")("pickNextNode")}
       />
+    </div>
+  );
+}
+
+interface AgentOption {
+  user_id: string;
+  full_name: string | null;
+  email: string | null;
+}
+
+/** Agent dropdown for the handoff node's optional `assign_to`. Falls
+ *  back to "no assignment only" if the members endpoint is unreachable. */
+export function AgentSelectRow({
+  label,
+  value,
+  onChange,
+}: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+}) {
+  const t = useTranslations("Flows.builder.form");
+  const [members, setMembers] = useState<AgentOption[]>([]);
+
+  useEffect(() => {
+    let cancelled = false;
+    void (async () => {
+      try {
+        const res = await fetch("/api/account/members", { cache: "no-store" });
+        if (!res.ok) return;
+        const json = (await res.json()) as { members?: AgentOption[] };
+        if (!cancelled) setMembers(json.members ?? []);
+      } catch {
+        // Members endpoint unreachable — field falls back to unassigned-only.
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  return (
+    <div>
+      <label className="mb-1 block text-xs text-muted-foreground">{label}</label>
+      <Select
+        value={value || "__none__"}
+        onValueChange={(v) => onChange(v === "__none__" ? "" : (v ?? ""))}
+      >
+        <SelectTrigger className="bg-muted">
+          <SelectValue placeholder={t("noAssignment")} />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="__none__">{t("noAssignment")}</SelectItem>
+          {members.map((m) => (
+            <SelectItem key={m.user_id} value={m.user_id}>
+              {m.full_name || m.email || m.user_id}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
     </div>
   );
 }

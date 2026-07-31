@@ -1230,6 +1230,8 @@
         "varKeyPlaceholder": "ex.: nome, email, empresa",
         "varKeyHelp": "Interpole em prompts posteriores e notas de repasse com",
         "advanceAfterCapture": "Após capturar, avançar para",
+        "assignToAgentLabel": "Atribuir ao agente",
+        "noAssignment": "Nenhum agente específico",
         "internalNote": "Nota interna (para o agente que assumir)",
         "endNodeHelp": "Nó terminal. Quando o executor chega a este nó, a execução é marcada como concluída. Nenhuma configuração necessária.",
         "bodyText": "Texto do corpo",
