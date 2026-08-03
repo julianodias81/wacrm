@@ -12,7 +12,8 @@
     "signingIn": "Signing in...",
     "signIn": "Sign in",
     "noAccount": "Don't have an account?",
-    "createAccount": "Create account"
+    "createAccount": "Create account",
+    "networkError": "Couldn't reach the server. Check your connection and try again."
   },
   "SignupPage": {
     "titleCreate": "Create account",
@@ -36,7 +37,8 @@
     "successTitle": "Check your email",
     "successDescPrefix": "We've sent a confirmation link to",
     "successDescSuffix": ". Please check your inbox and click the link to verify your account.",
-    "backToSignIn": "Back to sign in"
+    "backToSignIn": "Back to sign in",
+    "networkError": "Couldn't reach the server. Check your connection and try again."
   },
   "ForgotPasswordPage": {
     "title": "Reset password",
@@ -48,7 +50,8 @@
     "backToSignIn": "Back to sign in",
     "successTitle": "Check your email",
     "successDescPrefix": "We've sent a password reset link to",
-    "successDescSuffix": ". Please check your inbox."
+    "successDescSuffix": ". Please check your inbox.",
+    "networkError": "Couldn't reach the server. Check your connection and try again."
   },
   "JoinPage": {
     "verifyingInvitation": "Verifying invitation…",

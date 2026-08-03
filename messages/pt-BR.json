@@ -12,7 +12,8 @@
     "signingIn": "Entrando...",
     "signIn": "Entrar",
     "noAccount": "Não tem uma conta?",
-    "createAccount": "Criar conta"
+    "createAccount": "Criar conta",
+    "networkError": "Não foi possível conectar ao servidor. Verifique sua conexão e tente novamente."
   },
   "SignupPage": {
     "titleCreate": "Criar conta",
@@ -36,7 +37,8 @@
     "successTitle": "Confira seu e-mail",
     "successDescPrefix": "Enviamos um link de confirmação para",
     "successDescSuffix": ". Verifique sua caixa de entrada e clique no link para confirmar sua conta.",
-    "backToSignIn": "Voltar para o login"
+    "backToSignIn": "Voltar para o login",
+    "networkError": "Não foi possível conectar ao servidor. Verifique sua conexão e tente novamente."
   },
   "ForgotPasswordPage": {
     "title": "Redefinir senha",
@@ -48,7 +50,8 @@
     "backToSignIn": "Voltar para o login",
     "successTitle": "Confira seu e-mail",
     "successDescPrefix": "Enviamos um link de redefinição de senha para",
-    "successDescSuffix": ". Verifique sua caixa de entrada."
+    "successDescSuffix": ". Verifique sua caixa de entrada.",
+    "networkError": "Não foi possível conectar ao servidor. Verifique sua conexão e tente novamente."
   },
   "JoinPage": {
     "verifyingInvitation": "Verificando convite…",

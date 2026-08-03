@@ -12,7 +12,8 @@
     "signingIn": "로그인 중...",
     "signIn": "로그인",
     "noAccount": "계정이 없으신가요?",
-    "createAccount": "계정 만들기"
+    "createAccount": "계정 만들기",
+    "networkError": "서버에 연결할 수 없습니다. 연결 상태를 확인하고 다시 시도하세요."
   },
   "SignupPage": {
     "titleCreate": "계정 만들기",
@@ -36,7 +37,8 @@
     "successTitle": "이메일을 확인하세요",
     "successDescPrefix": "다음 주소로 인증 링크를 보냈습니다:",
     "successDescSuffix": ". 받은 편지함을 확인하고 링크를 클릭하여 계정을 인증하세요.",
-    "backToSignIn": "로그인으로 돌아가기"
+    "backToSignIn": "로그인으로 돌아가기",
+    "networkError": "서버에 연결할 수 없습니다. 연결 상태를 확인하고 다시 시도하세요."
   },
   "ForgotPasswordPage": {
     "title": "비밀번호 재설정",
@@ -48,7 +50,8 @@
     "backToSignIn": "로그인으로 돌아가기",
     "successTitle": "이메일을 확인하세요",
     "successDescPrefix": "다음 주소로 비밀번호 재설정 링크를 보냈습니다:",
-    "successDescSuffix": ". 받은 편지함을 확인하세요."
+    "successDescSuffix": ". 받은 편지함을 확인하세요.",
+    "networkError": "서버에 연결할 수 없습니다. 연결 상태를 확인하고 다시 시도하세요."
   },
   "JoinPage": {
     "verifyingInvitation": "초대 확인 중…",

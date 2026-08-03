@@ -49,13 +49,25 @@ function LoginPageInner() {
     setError(null);
     setLoading(true);
 
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
 
-    if (error) {
-      setError(error.message);
+      if (error) {
+        setError(error.message);
+        setLoading(false);
+        return;
+      }
+    } catch {
+      // signInWithPassword can reject (rather than resolve with `error`)
+      // on a network-layer failure — a dropped Wi-Fi connection, a DNS
+      // blip on the API subdomain, etc. Without this catch the promise
+      // rejection went unhandled: no error shown, button stuck on
+      // "Signing in...", and the only visible trace was "Failed to
+      // fetch" in the browser console.
+      setError(t("networkError"));
       setLoading(false);
       return;
     }
